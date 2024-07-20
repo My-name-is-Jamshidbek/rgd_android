@@ -1,11 +1,13 @@
-package com.example.waterfilter
+package com.example.waterfilter.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.waterfilter.Login.LoginRequest
-import com.example.waterfilter.Login.LoginResponse
+import com.example.waterfilter.api.ApiClient
+import com.example.waterfilter.api.ApiService
+import com.example.waterfilter.api.Login.LoginRequest
+import com.example.waterfilter.api.Login.LoginResponse
 import com.example.waterfilter.databinding.ActivityMainBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -39,7 +41,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun login(phone: String, password: String) {
         val apiService = ApiClient.getClient("http://rgd.amusoft.uz/api/").create(ApiService::class.java)
-        val loginRequest = LoginRequest(phone, password)
+        val loginRequest =
+            LoginRequest(phone, password)
         val call = apiService.login(loginRequest)
 
         call.enqueue(object : Callback<LoginResponse> {

@@ -1,4 +1,4 @@
-package com.example.waterfilter.Login;
+package com.example.waterfilter.api.Login;
 public class LoginRequest {
     private String phone;
     private String password;

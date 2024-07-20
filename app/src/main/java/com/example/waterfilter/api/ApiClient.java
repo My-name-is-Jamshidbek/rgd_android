@@ -1,4 +1,4 @@
-package com.example.waterfilter;
+package com.example.waterfilter.api;
 
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;

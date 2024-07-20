@@ -1,6 +1,6 @@
-package com.example.waterfilter;
-import com.example.waterfilter.Login.LoginRequest;
-import com.example.waterfilter.Login.LoginResponse;
+package com.example.waterfilter.api;
+import com.example.waterfilter.api.Login.LoginRequest;
+import com.example.waterfilter.api.Login.LoginResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
