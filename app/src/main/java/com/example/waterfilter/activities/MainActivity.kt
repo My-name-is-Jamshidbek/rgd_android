@@ -1,9 +1,13 @@
 package com.example.waterfilter.activities
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import com.example.waterfilter.R
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.api.Login.LoginRequest
@@ -41,8 +45,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun login(phone: String, password: String) {
         val apiService = ApiClient.getClient("http://rgd.amusoft.uz/api/").create(ApiService::class.java)
-        val loginRequest =
-            LoginRequest(phone, password)
+        val loginRequest = LoginRequest(phone, password)
         val call = apiService.login(loginRequest)
 
         call.enqueue(object : Callback<LoginResponse> {
@@ -59,26 +62,23 @@ class MainActivity : AppCompatActivity() {
                             editor.putString("token", loginResponse.data.token)
                             editor.apply()
 
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Login successful",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@MainActivity, "Kirildi", Toast.LENGTH_SHORT).show()
                             val intent = Intent(this@MainActivity, HomeActivity::class.java)
                             startActivity(intent)
                             finish()  // Optional: Close the login activity
                         }
                     }
                     422 -> {
-                        Toast.makeText(this@MainActivity, "Login failed: Invalid account information", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Parol yoki Telefon raqam noto`g`ri", Toast.LENGTH_SHORT).show()
                     }
                     else -> {
-                        Toast.makeText(this@MainActivity, "Login failed: Unexpected error", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@MainActivity, "Kirishni iloji bo`lmadi", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
+
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Login Failed: " + t.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@MainActivity, "Login Failed: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
