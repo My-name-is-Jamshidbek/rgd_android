@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="popup_text_size">15sp</dimen>
+    <dimen name="popup_margin_top">15dp</dimen>
+    <dimen name="popup_margin_bottom">10dp</dimen>
+    <dimen name="popup_margin_start">16dp</dimen>
+    <dimen name="popup_margin_end">18dp</dimen>
+    <dimen name="popup_text_size_default">20dp</dimen>
+</resources>
