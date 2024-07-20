@@ -3,4 +3,12 @@
     <string name="login">Kirish</string>
     <string name="username">Foydalanuvchi nomi</string>
     <string name="password">Parol</string>
+    <string name="location">Joylashuv</string>
+    <string name="service">Xizmat ko`rsatish</string>
+    <string name="FullName">F.I.O</string>
+    <string name="PhoneNumber">Telefon raqami</string>
+    <string name="Address">Manzil</string>
+    <string name="call">Chaqirish</string>
+    <string name="clients">Mijozlar</string>
+    <string name="clientsDesc">Bugun sizga xizmat ko`rsatish uchun biriktirilgan mijozlar ro`yxati</string>
 </resources>
