@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun login(phone: String, password: String) {
-        val apiService = ApiClient.getClient("http://rgd.amusoft.uz/api/").create(ApiService::class.java)
+        val apiService = ApiClient.getApiService(this)
         val loginRequest = LoginRequest(phone, password)
         val call = apiService.login(loginRequest)
 

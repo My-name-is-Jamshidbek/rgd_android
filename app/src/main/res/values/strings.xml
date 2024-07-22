@@ -11,4 +11,7 @@
     <string name="call">Chaqirish</string>
     <string name="clients">Mijozlar</string>
     <string name="clientsDesc">Bugun sizga xizmat ko`rsatish uchun biriktirilgan mijozlar ro`yxati</string>
+    <string name="settings">Sozlanmalar</string>
+    <string name="settingsDesc">Sozlanmalaringizni o`zgartirishingiz mumkin</string>
+    <string name="api_base_url">http://rgd.amusoft.uz/api/</string>
 </resources>

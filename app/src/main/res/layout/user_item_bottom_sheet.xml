@@ -117,7 +117,7 @@
             android:backgroundTint="#39c959"
             android:text="@string/location"
             android:textColor="#FFFFFF"
-            android:textSize="40px"
+            android:textSize="25px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -132,7 +132,7 @@
             android:backgroundTint="#2196F3"
             android:text="@string/service"
             android:textColor="#FFFFFF"
-            android:textSize="40px"
+            android:textSize="25px"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -146,7 +146,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:padding="18dp"
+            android:padding="15dp"
             android:background="@drawable/circle_button_background"
             android:backgroundTint="#FF5722"
             android:contentDescription="@string/call"

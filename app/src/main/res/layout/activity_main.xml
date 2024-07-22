@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
-        app:cardCornerRadius="30dp"
+        app:cardCornerRadius="5dp"
         app:cardElevation="20dp">
 
         <LinearLayout
@@ -36,11 +36,11 @@
                 android:textColor="@color/purple"/>
 
             <EditText
+                android:id="@+id/phone"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:id="@+id/phone"
-                android:background="@drawable/custom_edittext"
                 android:layout_marginTop="40dp"
+                android:background="@drawable/custom_edittext"
                 android:padding="8dp"
                 android:hint="@string/username"
                 android:drawableStart="@drawable/person_icon"
@@ -71,7 +71,7 @@
                 android:textSize="18sp"
                 android:layout_marginTop="30dp"
                 android:backgroundTint="@color/purple"
-                app:cornerRadius = "20dp"/>
+                app:cornerRadius = "5dp"/>
 
 
         </LinearLayout>
