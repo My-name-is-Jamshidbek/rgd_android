@@ -5,8 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -14,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.adapters.UserAdapter
-import com.example.waterfilter.data.User
+import com.example.waterfilter.data.Client
 
 class HomeActivity : AppCompatActivity() {
     @SuppressLint("MissingInflatedId", "SetTextI18n")
@@ -25,13 +23,13 @@ class HomeActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 
         // Sample data
-        val userList = listOf(
-            User("Jamshidbek Ollanazarov", "123456789", "5 Yangi yer, Yangi qadam", 37.7749, -122.4194),
-            User("Baxramov Ibrohim", "987654321", "456 Avenue, City", 34.0522, -118.2437),
-            User("Sapayev Baxrom", "555555555", "789 Boulevard, City", 40.7128, -74.0060)
+        val clientLists = listOf(
+            Client("Jamshidbek Ollanazarov", "123456789", "5 Yangi yer, Yangi qadam", 37.7749, -122.4194),
+            Client("Baxramov Ibrohim", "987654321", "456 Avenue, City", 34.0522, -118.2437),
+            Client("Sapayev Baxrom", "555555555", "789 Boulevard, City", 40.7128, -74.0060)
         )
 
-        val userAdapter = UserAdapter(this, userList)
+        val userAdapter = UserAdapter(this, clientLists)
         recyclerView.adapter = userAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
         val toolbar: Toolbar = findViewById(R.id.Toolbar)

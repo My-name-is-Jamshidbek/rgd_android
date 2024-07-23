@@ -104,7 +104,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editPhone" />
 
         <EditText
-            android:id="@+id/editPassword"
+            android:id="@+id/editNewPassword"
             android:layout_width="200sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -121,7 +121,7 @@
             app:layout_constraintTop_toBottomOf="@+id/oldPassword" />
 
         <EditText
-            android:id="@+id/editPassword2"
+            android:id="@+id/editNewPasswordConfirm"
             android:layout_width="200sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
@@ -135,7 +135,7 @@
             android:textSize="15sp"
             android:hint="Yangi parolni takrorlang"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/editNewPassword" />
 
         <TextView
             android:id="@+id/textView3"
@@ -215,7 +215,7 @@
             android:text="Yangilash"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editPassword2" />
+            app:layout_constraintTop_toBottomOf="@+id/editNewPasswordConfirm" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

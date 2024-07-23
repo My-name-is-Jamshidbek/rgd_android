@@ -11,10 +11,10 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.data.User
+import com.example.waterfilter.data.Client
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class UserAdapter(private val context: Context, private val userList: List<User>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(private val context: Context, private val clientList: List<Client>) : RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
     inner class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val fullNameTextView: TextView = itemView.findViewById(R.id.fullNameTextView)
@@ -29,7 +29,7 @@ class UserAdapter(private val context: Context, private val userList: List<User>
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        val user = userList[position]
+        val user = clientList[position]
         holder.fullNameTextView.text = user.fullName
         holder.phoneTextView.text = user.phone
         holder.addressTextView.text = user.address
@@ -46,9 +46,9 @@ class UserAdapter(private val context: Context, private val userList: List<User>
         }
     }
 
-    override fun getItemCount() = userList.size
+    override fun getItemCount() = clientList.size
 
-    private fun showBottomSheet(user: User) {
+    private fun showBottomSheet(client: Client) {
         val bottomSheetDialog = BottomSheetDialog(context)
         val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.user_item_bottom_sheet, null)
 
@@ -59,12 +59,12 @@ class UserAdapter(private val context: Context, private val userList: List<User>
         val serviceButton = bottomSheetView.findViewById<Button>(R.id.service)
         val callButton = bottomSheetView.findViewById<ImageButton>(R.id.callButton)
 
-        fullNameTextView.text = user.fullName
-        phoneTextView.text = user.phone
-        addressTextView.text = user.address
+        fullNameTextView.text = client.fullName
+        phoneTextView.text = client.phone
+        addressTextView.text = client.address
 
         locationButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("geo:${user.latitude},${user.longitude}")
+            val gmmIntentUri = Uri.parse("geo:${client.latitude},${client.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
@@ -72,7 +72,7 @@ class UserAdapter(private val context: Context, private val userList: List<User>
 
         callButton.setOnClickListener {
             val callIntent = Intent(Intent.ACTION_DIAL)
-            callIntent.data = Uri.parse("tel:${user.phone}")
+            callIntent.data = Uri.parse("tel:${client.phone}")
             context.startActivity(callIntent)
         }
 

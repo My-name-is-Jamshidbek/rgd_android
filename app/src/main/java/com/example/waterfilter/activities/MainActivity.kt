@@ -50,30 +50,27 @@ class MainActivity : AppCompatActivity() {
 
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                when (response.code()) {
-                    200 -> {
-                        response.body()?.let { loginResponse ->
-                            val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
-                            val editor = sharedPreferences.edit()
-                            editor.putBoolean("isLoggedIn", true)
-                            editor.putInt("userId", loginResponse.data.user.id)
-                            editor.putString("userName", loginResponse.data.user.name)
-                            editor.putString("userPhone", loginResponse.data.user.phone.toString())
-                            editor.putString("token", loginResponse.data.token)
-                            editor.apply()
+                if (response.isSuccessful) {
+                    response.body()?.let { loginResponse ->
+                        val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+                        val editor = sharedPreferences.edit()
+                        editor.putBoolean("isLoggedIn", true)
+                        editor.putInt("userId", loginResponse.data.user.id)
+                        editor.putString("userName", loginResponse.data.user.name)
+                        editor.putString("userPhone", loginResponse.data.user.phone.toString())
+                        editor.putString("token", loginResponse.data.token)
+                        editor.apply()
 
-                            Toast.makeText(this@MainActivity, "Kirildi", Toast.LENGTH_SHORT).show()
-                            val intent = Intent(this@MainActivity, HomeActivity::class.java)
-                            startActivity(intent)
-                            finish()  // Optional: Close the login activity
-                        }
+                        Toast.makeText(this@MainActivity, "Kirildi", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@MainActivity, HomeActivity::class.java)
+                        startActivity(intent)
+                        finish()  // Optional: Close the login activity
                     }
-                    422 -> {
-                        Toast.makeText(this@MainActivity, "Parol yoki Telefon raqam noto`g`ri", Toast.LENGTH_SHORT).show()
-                    }
-                    else -> {
-                        Toast.makeText(this@MainActivity, "Kirishni iloji bo`lmadi", Toast.LENGTH_SHORT).show()
-                    }
+                } else {
+                    // Log the raw response for debugging
+                    val errorBody = response.errorBody()?.string()
+                    println("Error: $errorBody")
+                    Toast.makeText(this@MainActivity, "Kirishni iloji bo`lmadi: $errorBody", Toast.LENGTH_SHORT).show()
                 }
             }
 

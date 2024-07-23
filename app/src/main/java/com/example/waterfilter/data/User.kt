@@ -1,9 +1,9 @@
 package com.example.waterfilter.data
 
 data class User(
-    val fullName: String,
+    val name: String,
     val phone: String,
-    val address: String,
-    val latitude: Double,
-    val longitude: Double
+    val current_password: String?,
+    val new_password: String?,
+    val new_password_confirmation: String?
 )

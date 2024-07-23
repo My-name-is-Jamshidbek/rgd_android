@@ -2,6 +2,7 @@ package com.example.waterfilter.api
 
 import android.content.Context
 import com.example.waterfilter.R
+import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -31,11 +32,16 @@ object ApiClient {
                         .addInterceptor(interceptor)
                         .build()
 
+                // Configure Gson to be lenient
+                val gson = GsonBuilder()
+                        .setLenient()
+                        .create()
+
                 // Build and return Retrofit instance
                 return Retrofit.Builder()
                         .baseUrl(baseUrl)
                         .client(client)
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
         }
 
