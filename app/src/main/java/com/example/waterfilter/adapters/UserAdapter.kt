@@ -42,7 +42,7 @@ class UserAdapter(private val context: Context, private val clientList: List<Cli
         }
 
         holder.itemView.setOnClickListener {
-            showBottomSheet(user),
+            showBottomSheet(user)
         }
     }
 
