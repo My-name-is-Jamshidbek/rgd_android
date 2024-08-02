@@ -3,4 +3,7 @@
     <string name="login">Kirish</string>
     <string name="username">Foydalanuvchi nomi</string>
     <string name="password">Parol</string>
+    <string name="oops">OOPS</string>
+    <string name="btn_retry">retry</string>
+    <string name="no_connect">no_connect</string>
 </resources>
