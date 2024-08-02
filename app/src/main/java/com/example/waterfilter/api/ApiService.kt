@@ -1,5 +1,6 @@
 package com.example.waterfilter.api
 
+import com.example.locationapp.LocationData
 import com.example.waterfilter.api.Login.LoginRequest
 import com.example.waterfilter.api.Login.LoginResponse
 import com.example.waterfilter.data.User
@@ -19,4 +20,11 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body user: User
     ): Response<User>
+
+
+    @POST("set-location")
+    suspend fun updateLocation(
+        @Header("Authorization") token: String,
+        @Body location: LocationData
+    ): Response<Void>
 }

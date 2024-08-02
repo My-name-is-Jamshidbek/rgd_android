@@ -14,4 +14,8 @@
     <string name="settings">Sozlanmalar</string>
     <string name="settingsDesc">Sozlanmalaringizni o`zgartirishingiz mumkin</string>
     <string name="api_base_url">http://rgd.amusoft.uz/api/</string>
+    <string name="title_home">Home</string>
+    <string name="title_wallet">Wallet</string>
+    <string name="title_chart">Chart</string>
+    <string name="title_profile">Profile</string>
 </resources>
