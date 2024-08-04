@@ -89,7 +89,7 @@ class SettingsActivity : AppCompatActivity() {
                         when (response.code()) {
                             401 -> {
                                 Toast.makeText(this@SettingsActivity, "You are not logged in. Please log in again.", Toast.LENGTH_SHORT).show()
-                                val intent = Intent(this@SettingsActivity, MainActivity::class.java)
+                                val intent = Intent(this@SettingsActivity, LoginActivity::class.java)
                                 startActivity(intent)
                                 finish()
                             }
@@ -131,7 +131,7 @@ class SettingsActivity : AppCompatActivity() {
                 editor.apply()
 
                 // Navigate back to login screen
-                val intent = Intent(this, MainActivity::class.java)
+                val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
                 finish()
                 Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()

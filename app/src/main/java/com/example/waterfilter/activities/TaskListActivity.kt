@@ -18,18 +18,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.LocationService
 import com.example.waterfilter.R
-import com.example.waterfilter.adapters.TaskAdapter
+import com.example.waterfilter.adapters.TaskListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.data.TaskResponse
+import com.example.waterfilter.data.TaskListResponse
 //import com.google.android.gms.location.FusedLocationProviderClient
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class HomeActivity : AppCompatActivity() {
+class TaskListActivity : AppCompatActivity() {
 
-    private val LOCATION_PERMISSION_REQUEST_CODE = 1000
+    private val LocationCode = 1000
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var apiService: ApiService
     private lateinit var recyclerView: RecyclerView
@@ -57,23 +57,23 @@ class HomeActivity : AppCompatActivity() {
         val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
         val token = sharedPreferences.getString("token", "") ?: return
 
-        apiService.getTasks("Bearer $token").enqueue(object : Callback<TaskResponse> {
-            override fun onResponse(call: Call<TaskResponse>, response: Response<TaskResponse>) {
+        apiService.getTasks("Bearer $token").enqueue(object : Callback<TaskListResponse> {
+            override fun onResponse(call: Call<TaskListResponse>, response: Response<TaskListResponse>) {
                 if (response.isSuccessful) {
                     response.body()?.tasks?.let { tasks ->
-                        Toast.makeText(this@HomeActivity, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
-                        val taskAdapter = TaskAdapter(this@HomeActivity, tasks)
-                        recyclerView.adapter = taskAdapter
+                        Toast.makeText(this@TaskListActivity, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
+                        val taskListAdapter = TaskListAdapter(this@TaskListActivity, tasks)
+                        recyclerView.adapter = taskListAdapter
                     } ?: run {
-                        Toast.makeText(this@HomeActivity, "No tasks available", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TaskListActivity, "No tasks available", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@HomeActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TaskListActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                Toast.makeText(this@HomeActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
+                Toast.makeText(this@TaskListActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -84,7 +84,7 @@ class HomeActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
-            ), LOCATION_PERMISSION_REQUEST_CODE)
+            ), LocationCode)
         } else {
             startLocationService()
         }
@@ -92,7 +92,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+        if (requestCode == LocationCode) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
                 (grantResults.size > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 startLocationService()
@@ -131,7 +131,7 @@ class HomeActivity : AppCompatActivity() {
         val editor = sharedPreferences.edit()
         editor.clear()
         editor.apply()
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, LoginActivity::class.java))
         finish()
         Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
     }

@@ -15,7 +15,7 @@ import com.example.waterfilter.R
 import com.example.waterfilter.data.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class TaskAdapter(private val context: Context, private val taskList: List<Task>) : RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskListAdapter(private val context: Context, private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val fullNameTextView: TextView = itemView.findViewById(R.id.fullNameTextView)

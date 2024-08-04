@@ -15,7 +15,7 @@ import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.example.locationapp.LocationData
-import com.example.waterfilter.activities.MainActivity
+import com.example.waterfilter.activities.LoginActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -61,7 +61,7 @@ class LocationService : Service() {
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(serviceChannel)
 
-        val notificationIntent = Intent(this, MainActivity::class.java)
+        val notificationIntent = Intent(this, LoginActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent,
             PendingIntent.FLAG_MUTABLE)
 
