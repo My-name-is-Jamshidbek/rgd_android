@@ -3,6 +3,7 @@ package com.example.waterfilter.api
 import com.example.locationapp.LocationData
 import com.example.waterfilter.api.Login.LoginRequest
 import com.example.waterfilter.api.Login.LoginResponse
+import com.example.waterfilter.data.TaskResponse
 import com.example.waterfilter.data.User
 import retrofit2.Call
 import retrofit2.Response
@@ -10,6 +11,7 @@ import retrofit2.http.Body
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.PUT
+import retrofit2.http.GET
 
 interface ApiService {
     @POST("login/")
@@ -27,4 +29,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body location: LocationData
     ): Response<Void>
+
+    @GET("tasks")
+    fun getTasks(
+        @Header("Authorization") token: String,
+    ): Call<TaskResponse>
 }

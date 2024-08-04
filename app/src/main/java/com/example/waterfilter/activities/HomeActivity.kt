@@ -3,7 +3,7 @@ package com.example.waterfilter.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.os.Build
+//import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -18,59 +18,74 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.LocationService
 import com.example.waterfilter.R
-import com.example.waterfilter.adapters.UserAdapter
+import com.example.waterfilter.adapters.TaskAdapter
+import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.data.Client
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.example.waterfilter.data.TaskResponse
+//import com.google.android.gms.location.FusedLocationProviderClient
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HomeActivity : AppCompatActivity() {
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
     private val LOCATION_PERMISSION_REQUEST_CODE = 1000
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var apiService: ApiService
+    private lateinit var recyclerView: RecyclerView
 
-    // Initialize with a no-op runnable
     private var locationRunnable: Runnable = Runnable { }
 
-    companion object {
-        private const val TAG = "HomeActivity"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
 
-        val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-
-        // Sample data
-        val clientLists = listOf(
-            Client("Jamshidbek Ollanazarov", "123456789", "5 Yangi yer, Yangi qadam", 37.7749, -122.4194),
-            Client("Baxramov Ibrohim", "987654321", "456 Avenue, City", 34.0522, -118.2437),
-            Client("Sapayev Baxrom", "555555555", "789 Boulevard, City", 40.7128, -74.0060)
-        )
-
-        val userAdapter = UserAdapter(this, clientLists)
-        recyclerView.adapter = userAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
         val toolbar: Toolbar = findViewById(R.id.Toolbar)
         setSupportActionBar(toolbar)
 
-        // Start the service after checking permissions
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        apiService = ApiClient.getApiService(this)
+
+        fetchTasks()
         checkPermissions()
+    }
+
+    private fun fetchTasks() {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", "") ?: return
+
+        apiService.getTasks("Bearer $token").enqueue(object : Callback<TaskResponse> {
+            override fun onResponse(call: Call<TaskResponse>, response: Response<TaskResponse>) {
+                if (response.isSuccessful) {
+                    response.body()?.tasks?.let { tasks ->
+                        Toast.makeText(this@HomeActivity, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
+                        val taskAdapter = TaskAdapter(this@HomeActivity, tasks)
+                        recyclerView.adapter = taskAdapter
+                    } ?: run {
+                        Toast.makeText(this@HomeActivity, "No tasks available", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(this@HomeActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
+                Toast.makeText(this@HomeActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     private fun checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Request permissions
             ActivityCompat.requestPermissions(this, arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LOCATION_PERMISSION_REQUEST_CODE)
         } else {
-            // Permissions already granted, start the service
             startLocationService()
         }
     }
@@ -80,10 +95,8 @@ class HomeActivity : AppCompatActivity() {
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
                 (grantResults.size > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
-                // Permissions granted, start the service
                 startLocationService()
             } else {
-                // Handle the case where permissions are denied
                 Toast.makeText(this, "Location permissions are required for this app", Toast.LENGTH_SHORT).show()
             }
         }
@@ -91,11 +104,7 @@ class HomeActivity : AppCompatActivity() {
 
     private fun startLocationService() {
         val serviceIntent = Intent(this, LocationService::class.java)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            ContextCompat.startForegroundService(this, serviceIntent)
-        } else {
-            startService(serviceIntent)
-        }
+        ContextCompat.startForegroundService(this, serviceIntent)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -106,26 +115,25 @@ class HomeActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.settings -> {
-                Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show()
-                val intent = Intent(this, SettingsActivity::class.java)
-                startActivity(intent)
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             R.id.logout -> {
-                val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
-                val editor = sharedPreferences.edit()
-                editor.clear()
-                editor.apply()
-
-                // Navigate back to login screen
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
-                finish()
-                Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+                logout()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun logout() {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+        startActivity(Intent(this, MainActivity::class.java))
+        finish()
+        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {
