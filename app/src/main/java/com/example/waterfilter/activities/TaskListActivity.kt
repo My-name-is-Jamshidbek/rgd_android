@@ -39,7 +39,7 @@ class TaskListActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_home)
+        setContentView(R.layout.activity_list_task)
 
         val toolbar: Toolbar = findViewById(R.id.Toolbar)
         setSupportActionBar(toolbar)

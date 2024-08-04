@@ -10,8 +10,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
+import com.example.waterfilter.activities.TaskActivity
+import com.example.waterfilter.activities.TaskListActivity
 import com.example.waterfilter.data.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
@@ -58,7 +61,7 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
         val phoneTextView = bottomSheetView.findViewById<TextView>(R.id.phoneTextView)
         val addressTextView = bottomSheetView.findViewById<TextView>(R.id.addressTextView)
         val locationButton = bottomSheetView.findViewById<Button>(R.id.locationButton)
-//        val serviceButton = bottomSheetView.findViewById<Button>(R.id.service)
+        val serviceButton = bottomSheetView.findViewById<Button>(R.id.service)
         val callButton = bottomSheetView.findViewById<ImageButton>(R.id.callButton)
 
         fullNameTextView.text = task.client.name
@@ -78,6 +81,12 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
             context.startActivity(callIntent)
         }
 
+        // Updated serviceButton click listener
+        serviceButton.setOnClickListener {
+            val intent = Intent(context, TaskActivity::class.java)
+            intent.putExtra("TASK_ID", task.id.toString())
+            context.startActivity(intent)
+        }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()
     }

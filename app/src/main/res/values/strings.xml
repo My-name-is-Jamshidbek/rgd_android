@@ -18,4 +18,21 @@
     <string name="title_wallet">Wallet</string>
     <string name="title_chart">Chart</string>
     <string name="title_profile">Profile</string>
+
+<!--                          TASK-->
+
+    <string name="filter_data">FILTR MA`LUMOTLARI</string>
+    <string name="filter_name">Model</string>
+    <string name="filter_expire_date">Filtr almashtirish sanasi</string>
+    <string name="filter_expire">Filtr almashtirish oralig`i</string>
+    <string name="filter_installation_date">O`rnatilgan sana</string>
+
+    <string name="client_data">MIJOZ MA`LUMOTLARI</string>
+    <string name="client_name">Ismi</string>
+    <string name="client_phone">Telefon</string>
+    <string name="client_desc">Mijoz haqida</string>
+
+    <string name="services">SERVISLAR</string>
+    <string name="service_name">Servis nomi</string>
+    <string name="service_cost">Servis narxi</string>
 </resources>

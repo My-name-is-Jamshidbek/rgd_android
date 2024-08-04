@@ -7,13 +7,13 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.Login.LoginRequest
 import com.example.waterfilter.api.Login.LoginResponse
-import com.example.waterfilter.databinding.ActivityMainBinding
+import com.example.waterfilter.databinding.ActivityLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+    private lateinit var binding: ActivityLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
             finish()  // Close the current activity
         } else {
             // User is not logged in, show the login screen
-            binding = ActivityMainBinding.inflate(layoutInflater)
+            binding = ActivityLoginBinding.inflate(layoutInflater)
             setContentView(binding.root)
 
             binding.loginButton.setOnClickListener {
