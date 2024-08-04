@@ -3,7 +3,9 @@ package com.example.waterfilter.api
 import android.content.Context
 import com.example.waterfilter.R
 import com.google.gson.GsonBuilder
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -23,13 +25,24 @@ object ApiClient {
         // Method to build Retrofit instance
         private fun buildRetrofit(baseUrl: String): Retrofit {
                 // Create an interceptor for logging HTTP request and response data
-                val interceptor = HttpLoggingInterceptor().apply {
+                val loggingInterceptor = HttpLoggingInterceptor().apply {
                         level = HttpLoggingInterceptor.Level.BODY
                 }
 
-                // Build OkHttpClient with the interceptor
+                // Create an interceptor to add headers
+                val headerInterceptor = Interceptor { chain ->
+                        val original = chain.request()
+                        val requestBuilder: Request.Builder = original.newBuilder()
+                                .header("Content-Type", "application/json")
+                                .header("Accept", "application/json")
+                        val request: Request = requestBuilder.build()
+                        chain.proceed(request)
+                }
+
+                // Build OkHttpClient with the interceptors
                 val client = OkHttpClient.Builder()
-                        .addInterceptor(interceptor)
+                        .addInterceptor(loggingInterceptor)
+                        .addInterceptor(headerInterceptor)
                         .build()
 
                 // Configure Gson to be lenient
@@ -44,7 +57,6 @@ object ApiClient {
                         .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
         }
-
 
         // Method to get ApiService instance
         fun getApiService(context: Context): ApiService {
