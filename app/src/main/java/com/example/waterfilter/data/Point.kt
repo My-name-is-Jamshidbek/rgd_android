@@ -4,8 +4,8 @@ import com.google.gson.annotations.SerializedName
 data class Point(
     @SerializedName("id") val id: Int,
     @SerializedName("client_id") val clientId: Int,
-    @SerializedName("latitude") val latitude: String?,
-    @SerializedName("longitude") val longitude: String?,
+    @SerializedName("latitude") var latitude: String?,
+    @SerializedName("longitude") var longitude: String?,
     @SerializedName("region_id") val regionId: Int,
     @SerializedName("address") val address: String,
     @SerializedName("filter_id") val filterId: Int,

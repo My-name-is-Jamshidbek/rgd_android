@@ -35,4 +35,9 @@
     <string name="services">SERVISLAR</string>
     <string name="service_name">Servis nomi</string>
     <string name="service_cost">Servis narxi</string>
+    <string name="poin_location">Filtr joylashuvi</string>
+    <string name="poin_location_btn">Ko`rish</string>
+    <string name="set_laction_text">Joylashv belgilanmagan iltimos joylashuvni belgilang</string>
+    <string name="set_location_btn">Joylashuvni belgilash</string>
+    <string name="set_laction_about_text">Mijoz joylashuvini belgilang!</string>
 </resources>

@@ -28,8 +28,21 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var apiService: ApiService
     private lateinit var taskId: String
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationButton: Button
+
     private lateinit var locationSetLayout: LinearLayout
+    private lateinit var setLoctionAboutTextView: TextView
+    private lateinit var setLoctionTextView: TextView
+    private lateinit var setLoctionButton: Button
+
+    private lateinit var clientNameTextView: TextView
+    private lateinit var clientPhoneTextView: TextView
+    private lateinit var clientDescTextView: TextView
+
+    private lateinit var pointLocationTextView: Button
+    private lateinit var pointModelTextView: TextView
+    private lateinit var pointExpireDateTextView: TextView
+    private lateinit var pointExpireTextView: TextView
+    private lateinit var pointInstallationDateTextView: TextView
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -49,14 +62,26 @@ class TaskActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
 
         // Initialize views
-        locationButton = findViewById(R.id.setLoctionButton)
         locationSetLayout = findViewById(R.id.locationSetLayout)
+        setLoctionAboutTextView = findViewById(R.id.setLoctionAboutTextView)
+        setLoctionTextView = findViewById(R.id.setLoctionTextView)
+        setLoctionButton = findViewById(R.id.setLoctionButton)
+
+        clientNameTextView = findViewById(R.id.clientNameTextView)
+        clientPhoneTextView = findViewById(R.id.clientPhoneTextView)
+        clientDescTextView = findViewById(R.id.clientDescTextView)
+
+        pointLocationTextView = findViewById(R.id.pointLocationTextView)
+        pointModelTextView = findViewById(R.id.pointModelTextView)
+        pointExpireDateTextView = findViewById(R.id.pointExpireDateTextView)
+        pointExpireTextView = findViewById(R.id.pointExpireTextView)
+        pointInstallationDateTextView = findViewById(R.id.pointInstallationDateTextView)
 
         // Fetch task details
         fetchTaskDetails(taskId)
 
         // Set button click listener
-        locationButton.setOnClickListener {
+        setLoctionButton.setOnClickListener {
             sendCurrentLocation()
         }
     }
@@ -69,19 +94,45 @@ class TaskActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val taskResponse = response.body()
                     taskResponse?.let {
-                        if (it.task.point.latitude != null && it.task.point.longitude != null) {
-                            locationSetLayout.visibility = View.GONE
-                        }
+                        bindData(it)
                     }
                 } else {
-                    // Handle error
+                    Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                // Handle failure
+                Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun bindData(taskResponse: TaskResponse) {
+        val task = taskResponse.task
+        val client = task.client
+        val point = task.point
+
+        if (point.latitude != null && point.longitude != null) {
+            locationSetLayout.visibility = View.GONE
+        }
+
+        clientNameTextView.text = client.name
+        clientPhoneTextView.text = client.phone
+        clientDescTextView.text = client.description
+
+        pointLocationTextView.text = getString(R.string.poin_location_btn)
+        pointModelTextView.text = point.filterId.toString()
+        pointExpireDateTextView.text = point.filterExpireDate
+        pointExpireTextView.text = point.filterExpire.toString()
+        pointInstallationDateTextView.text = point.installationDate
+    }
+
+    fun requestLocationPermission() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), LOCATION_PERMISSION_REQUEST_CODE)
+        } else {
+            sendCurrentLocation()
+        }
     }
 
     private fun sendCurrentLocation() {
@@ -100,15 +151,15 @@ class TaskActivity : AppCompatActivity() {
                     apiService.setPointLocation("Bearer $token", request).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                Toast.makeText(this@TaskActivity, "Location send", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@TaskActivity, "Location sent", Toast.LENGTH_SHORT).show()
                                 locationSetLayout.visibility = View.GONE
                             } else {
-                                Toast.makeText(this@TaskActivity, "Location not send", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
                             }
                         }
 
                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Toast.makeText(this@TaskActivity, "Location send failure", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
                         }
                     })
                 }
@@ -122,7 +173,7 @@ class TaskActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 sendCurrentLocation()
             } else {
-                // Permission denied
+                Toast.makeText(this@TaskActivity, "Location permission denied", Toast.LENGTH_SHORT).show()
             }
         }
     }

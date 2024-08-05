@@ -28,13 +28,14 @@ class LoginActivity : AppCompatActivity() {
         } else {
             // User is not logged in, show the login screen
             binding = ActivityLoginBinding.inflate(layoutInflater)
-            setContentView(binding.root)
 
             binding.loginButton.setOnClickListener {
                 val phone = binding.phone.text.toString()
                 val password = binding.password.text.toString()
                 login(phone, password)
             }
+
+            setContentView(binding.root)
         }
     }
 
