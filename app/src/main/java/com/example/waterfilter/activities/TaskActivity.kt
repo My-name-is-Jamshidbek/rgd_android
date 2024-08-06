@@ -1,6 +1,7 @@
 package com.example.waterfilter.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -12,9 +13,14 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
+import com.example.waterfilter.adapters.ProductAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
+import com.example.waterfilter.data.AgentProduct
+import com.example.waterfilter.data.Product
 import com.example.waterfilter.data.SetPointLocationRequest
 import com.example.waterfilter.data.TaskResponse
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -44,10 +50,18 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var pointExpireTextView: TextView
     private lateinit var pointInstallationDateTextView: TextView
 
+    private lateinit var productRecyclerView: RecyclerView
+    private lateinit var addProductButton: Button
+    private lateinit var productAdapter: ProductAdapter
+    private var taskProducts: MutableList<AgentProduct> = mutableListOf() // Initialize with an empty list
+    private lateinit var agentProduct: AgentProduct
+    private var agentProducts: List<AgentProduct> = emptyList() // Initialize with an empty list
+
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
@@ -77,13 +91,27 @@ class TaskActivity : AppCompatActivity() {
         pointExpireTextView = findViewById(R.id.pointExpireTextView)
         pointInstallationDateTextView = findViewById(R.id.pointInstallationDateTextView)
 
+        // Initialize RecyclerView for products
+        productRecyclerView = findViewById(R.id.productRecyclerView)
+        productRecyclerView.layoutManager = LinearLayoutManager(this)
+        productRecyclerView.setHasFixedSize(true)
+
+        // Initialize add product button and set click listener
+        addProductButton = findViewById(R.id.addProduct)
+        addProductButton.setOnClickListener {
+            // Create a new product item
+            Toast.makeText(this@TaskActivity, "Product added", Toast.LENGTH_SHORT).show()
+            addProduct()
+        }
+
         // Fetch task details
         fetchTaskDetails(taskId)
+    }
 
-        // Set button click listener
-        setLoctionButton.setOnClickListener {
-            sendCurrentLocation()
-        }
+    @SuppressLint("NotifyDataSetChanged")
+    private fun addProduct() {
+        taskProducts.add(this.agentProduct)
+        productAdapter.notifyDataSetChanged()
     }
 
     private fun fetchTaskDetails(taskId: String) {
@@ -112,6 +140,9 @@ class TaskActivity : AppCompatActivity() {
         val client = task.client
         val point = task.point
 
+        this.agentProduct = taskResponse.agentProducts[0]
+        this.agentProducts = taskResponse.agentProducts
+
         if (point.latitude != null && point.longitude != null) {
             locationSetLayout.visibility = View.GONE
         }
@@ -125,6 +156,10 @@ class TaskActivity : AppCompatActivity() {
         pointExpireDateTextView.text = point.filterExpireDate
         pointExpireTextView.text = point.filterExpire.toString()
         pointInstallationDateTextView.text = point.installationDate
+
+        // Set up ProductAdapter after fetching the task details
+        productAdapter = ProductAdapter(this, taskProducts, agentProducts)
+        productRecyclerView.adapter = productAdapter
     }
 
     fun requestLocationPermission() {

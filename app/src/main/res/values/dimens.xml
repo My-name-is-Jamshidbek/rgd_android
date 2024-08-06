@@ -6,4 +6,5 @@
     <dimen name="popup_margin_start">16dp</dimen>
     <dimen name="popup_margin_end">18dp</dimen>
     <dimen name="popup_text_size_default">16dp</dimen>
+    <dimen name="product_item_padding">8dp</dimen>
 </resources>
