@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,30 +17,30 @@
         app:title="Real Gold Drigger"
         app:titleMarginStart="30dp" />
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
         app:layout_constraintBottom_toTopOf="@id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/Toolbar"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintTop_toBottomOf="@id/Toolbar">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="10dp"
+            android:layout_height="wrap_content">
 
             <!-- POINT LOCATION -->
             <LinearLayout
                 android:id="@+id/locationSetLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:id="@+id/locationSetAboutLayout"
@@ -79,6 +80,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
+                        android:backgroundTint="#39c959"
                         android:padding="8dp"
                         android:text="@string/set_location_btn" />
                 </LinearLayout>
@@ -86,9 +88,14 @@
 
             <!-- CLIENT DATA -->
             <LinearLayout
+                android:id="@+id/linearLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/locationSetLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -107,7 +114,8 @@
                 android:id="@+id/clientNameLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout4">
 
                 <TextView
                     android:layout_width="0dp"
@@ -131,7 +139,8 @@
                 android:id="@+id/clientPhoneLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/clientNameLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -155,7 +164,8 @@
                 android:id="@+id/clientDescLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/clientPhoneLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -176,9 +186,11 @@
 
             <!-- POINT DATA -->
             <LinearLayout
+                android:id="@+id/linearLayout5"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/clientDescLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -196,7 +208,8 @@
                 android:id="@+id/pointLocationLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout5">
 
                 <TextView
                     android:layout_width="0dp"
@@ -210,16 +223,19 @@
                     android:id="@+id/pointLocationTextView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:backgroundTint="#39c959"
                     android:layout_gravity="end"
                     android:padding="8dp"
                     android:text="@string/poin_location_btn" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pointModelLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:paddingTop="12dp">
+                android:paddingTop="12dp"
+                app:layout_constraintTop_toBottomOf="@id/pointLocationLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -239,9 +255,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pointExpireDateLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/pointModelLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -261,9 +279,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pointExpireLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/pointExpireDateLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -283,9 +303,11 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pointInstallationDateLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/pointExpireLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -306,9 +328,11 @@
 
             <!-- SERVICES -->
             <LinearLayout
+                android:id="@+id/pointServiceLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@id/pointInstallationDateLayout">
 
                 <TextView
                     android:layout_width="0dp"
@@ -327,26 +351,40 @@
                 android:id="@+id/productRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false" />
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/pointServiceLayout" />
+
 
             <!-- ADD PRODUCT -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="clip_horizontal|center"
-                android:orientation="horizontal"
-                android:padding="10dp">
+                android:layout_marginTop="16dp"
+                android:padding="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/productRecyclerView">
 
                 <Button
                     android:id="@+id/addProduct"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:backgroundTint="#39c959"
+                    android:layout_margin="5dp"
                     android:drawableEnd="@drawable/ic_baseline_add_24"
                     android:text="@string/add_service_btn_text" />
+
+                <Button
+                    android:id="@+id/completeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:layout_weight="1"
+                    android:text="@string/complete_task"/>
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"

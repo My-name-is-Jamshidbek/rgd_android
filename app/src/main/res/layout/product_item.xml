@@ -73,7 +73,7 @@
                 android:layout_gravity="end"
                 android:paddingVertical="8dp"
                 android:backgroundTint="#ffff"
-                app:srcCompat="@drawable/delete_icon"
+                android:drawableRight="@drawable/delete_icon"
                 android:contentDescription="@string/text_delete" />
 
         </LinearLayout>

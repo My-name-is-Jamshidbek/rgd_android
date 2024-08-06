@@ -85,10 +85,12 @@ class ProductAdapter(
         Log.d("ProductAdapter", "Products: $taskProducts")
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     fun removeProduct(position: Int) {
         taskProducts.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, taskProducts.size)
-        Log.d("ProductAdapter", "Product removed at position: $position")
+        notifyItemRangeChanged(position, taskProducts.size - position) // Update this line
+        notifyDataSetChanged()
+        Log.d("ProductAdapter", "Product removed at position: $position, new size: ${taskProducts.size}")
     }
 }
