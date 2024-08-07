@@ -12,8 +12,10 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
+import com.example.waterfilter.activities.TaskActivity
 import com.example.waterfilter.data.AgentProduct
 import com.example.waterfilter.data.TaskProduct
 
@@ -36,17 +38,21 @@ class ProductAdapter(
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ProductViewHolder, @SuppressLint("RecyclerView") position: Int) {
         val product = taskProducts[position]
-//        holder.checkBox.isChecked = product.isSelected
 
+        // Set the checkbox state based on the product's isSelected property
+        holder.checkBox.setOnCheckedChangeListener(null)  // Clear any previous listener
+        holder.checkBox.isChecked = product.isSelected
+
+        // Set a new listener for the checkbox
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                taskProducts[holder.adapterPosition] = taskProducts[holder.adapterPosition].copy(
-                    isSelected = isChecked
-                )
+            val adapterPosition = holder.adapterPosition
+            if (adapterPosition != RecyclerView.NO_POSITION) {
+                taskProducts[adapterPosition].isSelected = isChecked
             }
         }
+
 
         // Create a list of product names for the Spinner
         val productNames = agentProducts.map { it.product.name }
@@ -71,12 +77,10 @@ class ProductAdapter(
 
                 // Update the product quantity TextView
                 holder.productQuantity.text = "${selectedProduct.price} so'm"
-                taskProducts[holder.adapterPosition] = selectedProduct.copy() // Update the taskProducts list
+                val newItem = selectedProduct.copy() // Update the taskProducts list
+                newItem.isSelected =taskProducts[holder.adapterPosition].isSelected
+                taskProducts[holder.adapterPosition] = newItem
 
-//                taskProducts[holder.adapterapterPosition] = taskProducts[holder.adapterPosition].copy(
-//                    id=selectedProduct.id,
-//                    product = selectedProduct.product.copy() // Create a new instance of the product
-//                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -88,8 +92,6 @@ class ProductAdapter(
         holder.removeProductButton.setOnClickListener {
             removeProduct(holder.adapterPosition)
         }
-
-//        holder.bind(product)
 
     }
 
@@ -105,15 +107,18 @@ class ProductAdapter(
         Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
         taskProducts.add(item)
         Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
-        Log.d("ProductAdapter", "Product added at position: ${taskProducts.size - 1}")
+        Log.d("ProductAdapter", "Product selected: ${item.isSelected}")
 
-        // Notify the adapter about the new item inserted
+        // Notify the adapter about the new item inserted\
+        ;
         if(taskProducts.size == 1){
+            notifyDataSetChanged()
 
-            notifyDataSetChanged();
         } else {
             notifyItemInserted(taskProducts.size - 1)
-            notifyItemRangeChanged(taskProducts.size - 1, taskProducts.size)
+//            notifyItemRangeChanged(taskProducts.size - 1, 1)
+//            (context as TaskActivity).findViewById<NestedScrollView>(R.id.scrollView).requestLayout()
+            (context as TaskActivity).findViewById<RecyclerView>(R.id.productRecyclerView).smoothScrollToPosition(taskProducts.size - 1)
         }
 
         Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")
@@ -121,9 +126,16 @@ class ProductAdapter(
 
 
     fun removeProduct(position: Int) {
-        taskProducts.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, taskProducts.size) // Notify that range of items have changed
-        Log.d("ProductAdapter", "Product removed at position: $position, new size: ${taskProducts.size}")
+        Log.d("ProductAdapter", "Position: $position, Size: ${taskProducts.size}")
+        if (position != RecyclerView.NO_POSITION) {
+            taskProducts.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(
+                position,
+                taskProducts.size - position - 1
+            ) // Notify that range of items have changed
+        }
+        Log.d("ProductAdapter", "Position: $position, Size: ${taskProducts.size}")
+
     }
 }
