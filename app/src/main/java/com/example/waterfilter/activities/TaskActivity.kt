@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
@@ -22,6 +23,7 @@ import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.AgentProduct
 import com.example.waterfilter.data.Product
 import com.example.waterfilter.data.SetPointLocationRequest
+import com.example.waterfilter.data.TaskProduct
 import com.example.waterfilter.data.TaskResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -104,8 +106,32 @@ class TaskActivity : AppCompatActivity() {
             addProduct()
         }
 
+        // Setup a button to send data
+        val sendButton: Button = findViewById(R.id.completeButton)
+        sendButton.setOnClickListener {
+            sendTaskProductsWithCheckboxResults()
+        }
+
         // Fetch task details
         fetchTaskDetails(taskId)
+    }
+
+    private fun sendTaskProductsWithCheckboxResults() {
+        val selectedProducts = taskProducts.map { AgentProduct ->
+            TaskProduct(
+                productId = AgentProduct.product.id,
+                isSelected = AgentProduct.isSelected
+            )
+        }
+
+        // Now send selectedProducts to your server or another activity
+        // For demonstration, we'll just log the results
+        selectedProducts.forEach {
+            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
+        }
+
+        // If sending to a server, you might do something like this:
+        // sendToServer(selectedProducts)
     }
 
     @SuppressLint("NotifyDataSetChanged")

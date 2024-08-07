@@ -11,5 +11,6 @@ data class AgentProduct(
     @SerializedName("service_price") val servicePrice: Int,
     @SerializedName("created_at") val createdAt: Date,
     @SerializedName("updated_at") val updatedAt: Date,
-    @SerializedName("product") val product: Product
+    @SerializedName("product") var product: Product,
+    var isSelected: Boolean = false // This should not have SerializedName annotation
 )

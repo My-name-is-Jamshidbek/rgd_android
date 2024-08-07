@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,7 @@ class ProductAdapter(
         val productSpinner: Spinner = view.findViewById(R.id.productSpinner)
         val productQuantity: TextView = view.findViewById(R.id.productQuantity)
         val removeProductButton: Button = view.findViewById(R.id.removeProductButton)
+        val checkBox: CheckBox = view.findViewById(R.id.productCheckbox)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -35,6 +37,21 @@ class ProductAdapter(
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = taskProducts[position]
+//        holder.checkBox.isChecked = product.isSelected
+
+        // Update the product's isSelected property when the checkbox is toggled
+        holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
+            // To avoid triggering this listener during binding
+            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+//                product.isSelected = isChecked
+//                taskProducts[0].isSelected = isChecked
+                taskProducts[holder.adapterPosition] = taskProducts[holder.adapterPosition].copy(
+                    isSelected = isChecked
+                )
+            }
+            Log.d("productadapter", position.toString())
+            Log.d("productadapter", taskProducts.toString())
+        }
 
         // Create a list of product names for the Spinner
         val productNames = agentProducts.map { it.product.name }
@@ -49,17 +66,22 @@ class ProductAdapter(
         holder.productSpinner.setSelection(productNames.indexOf(product.product.name).takeIf { it != -1 } ?: 0)
 
         // Set initial product quantity
-        holder.productQuantity.text = "${product.quantity} so'm"
+        holder.productQuantity.text = "${product.price} so'm"
 
         // Set an item selected listener on the Spinner
         holder.productSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, spinnerPosition: Int, id: Long) {
                 // Get the selected product
-                val selectedProduct = agentProducts[position]
+                val selectedProduct = agentProducts[spinnerPosition]
 
                 // Update the product quantity TextView
-                holder.productQuantity.text = "${selectedProduct.quantity} so'm"
-                taskProducts[holder.adapterPosition] = selectedProduct // Update the taskProducts list
+                holder.productQuantity.text = "${selectedProduct.price} so'm"
+                taskProducts[holder.adapterPosition] = selectedProduct.copy() // Update the taskProducts list
+
+//                taskProducts[holder.adapterapterPosition] = taskProducts[holder.adapterPosition].copy(
+//                    id=selectedProduct.id,
+//                    product = selectedProduct.product.copy() // Create a new instance of the product
+//                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -75,22 +97,17 @@ class ProductAdapter(
 
     override fun getItemCount(): Int = taskProducts.size
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addProduct() {
         taskProducts.add(agentProducts[0])
-        notifyItemInserted(taskProducts.size + 1)
-        notifyItemRangeChanged(0, taskProducts.size)
-        notifyDataSetChanged()
+        notifyItemInserted(taskProducts.size - 1)
         Log.d("ProductAdapter", "Product added: ${agentProducts[0].product.name}")
         Log.d("ProductAdapter", "Products: $taskProducts")
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun removeProduct(position: Int) {
         taskProducts.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, taskProducts.size - position) // Update this line
-        notifyDataSetChanged()
+        notifyItemRangeChanged(position, taskProducts.size) // Notify that range of items have changed
         Log.d("ProductAdapter", "Product removed at position: $position, new size: ${taskProducts.size}")
     }
 }
