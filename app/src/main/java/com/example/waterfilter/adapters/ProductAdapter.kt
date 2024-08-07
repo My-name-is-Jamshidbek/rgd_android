@@ -40,18 +40,12 @@ class ProductAdapter(
         val product = taskProducts[position]
 //        holder.checkBox.isChecked = product.isSelected
 
-        // Update the product's isSelected property when the checkbox is toggled
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            // To avoid triggering this listener during binding
             if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-//                product.isSelected = isChecked
-//                taskProducts[0].isSelected = isChecked
                 taskProducts[holder.adapterPosition] = taskProducts[holder.adapterPosition].copy(
                     isSelected = isChecked
                 )
             }
-            Log.d("productadapter", position.toString())
-            Log.d("productadapter", taskProducts.toString())
         }
 
         // Create a list of product names for the Spinner
@@ -94,6 +88,9 @@ class ProductAdapter(
         holder.removeProductButton.setOnClickListener {
             removeProduct(holder.adapterPosition)
         }
+
+//        holder.bind(product)
+
     }
 
     override fun getItemCount(): Int = taskProducts.size
@@ -101,19 +98,25 @@ class ProductAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun addProduct() {
         // Create a new copy of the product
-        val newProduct = agentProducts[0].product.copy()
+        val item = agentProducts[0].copy()
 
-        // Create a new instance of AgentProduct with the copied product
-        val newAgentProduct = agentProducts[0].copy(
-            product = newProduct,
-            isSelected = false // Ensure isSelected is set to false by default
-        )
 
         // Add the new instance to the taskProducts list
-        taskProducts.add(newAgentProduct)
-        notifyDataSetChanged()
-        Log.d("ProductAdapter", "Product added: ${newAgentProduct.product.name}")
-        Log.d("ProductAdapter", "Products: $taskProducts")
+        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+        taskProducts.add(item)
+        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+        Log.d("ProductAdapter", "Product added at position: ${taskProducts.size - 1}")
+
+        // Notify the adapter about the new item inserted
+        if(taskProducts.size == 1){
+
+            notifyDataSetChanged();
+        } else {
+            notifyItemInserted(taskProducts.size - 1)
+            notifyItemRangeChanged(taskProducts.size - 1, taskProducts.size)
+        }
+
+        Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")
     }
 
 

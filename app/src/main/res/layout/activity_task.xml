@@ -346,24 +346,16 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <!-- RecyclerView for products -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/productRecyclerView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                app:layout_constraintTop_toBottomOf="@id/pointServiceLayout" />
-
-
             <!-- ADD PRODUCT -->
             <LinearLayout
+                android:id="@+id/addProductLayout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:padding="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/productRecyclerView">
+                app:layout_constraintTop_toBottomOf="@+id/pointServiceLayout">
 
                 <Button
                     android:id="@+id/addProduct"
@@ -383,6 +375,16 @@
                     android:layout_weight="1"
                     android:text="@string/complete_task"/>
             </LinearLayout>
+
+            <!-- RecyclerView for products -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/productRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                app:layout_constraintTop_toBottomOf="@id/addProductLayout" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
