@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
@@ -21,10 +22,10 @@ import com.example.waterfilter.adapters.ProductAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.AgentProduct
-import com.example.waterfilter.data.Product
 import com.example.waterfilter.data.SetPointLocationRequest
 import com.example.waterfilter.data.TaskProduct
 import com.example.waterfilter.data.TaskResponse
+import com.example.waterfilter.vm.MyViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import retrofit2.Call
@@ -62,11 +63,13 @@ class TaskActivity : AppCompatActivity() {
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
-
+    lateinit var viewModel: MyViewModel
     @SuppressLint("NotifyDataSetChanged")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
+
+        viewModel = ViewModelProvider(this)[MyViewModel::class.java]
 
         // Get task ID from intent
         taskId = intent.getStringExtra("TASK_ID") ?: ""
@@ -135,8 +138,10 @@ class TaskActivity : AppCompatActivity() {
                 isSelected = agentProduct.isSelected
             ).also {
                 Log.d("MainActivity", "Mapped Index: $index, Product ID: ${it.productId}, Selected: ${it.isSelected}")
+                Log.d("MainActivity", "sendTaskProductsWithCheckboxResults: ${viewModel.productLiveData.value}")
             }
         }.toMutableList()
+
 
 // Log the contents of selectedProducts
 //        selectedProducts.forEach {
@@ -155,7 +160,31 @@ class TaskActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun addProduct() {
-        productAdapter.addProduct()
+        addProductList()
+    }
+
+    fun addProductList() {
+        // Create a new copy of the product
+        val item = agentProducts[0].copy()
+
+        // Add the new instance to the taskProducts list
+        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+        taskProducts.add(item)
+        Log.d("MainActivity", "addProductList: ${viewModel.productLiveData.value}")
+        viewModel.setProductLiveData(taskProducts)
+
+        viewModel.getProductLiveData().observe(this@TaskActivity){ it ->
+            productAdapter.observe(it)
+        }
+
+        Log.d("MainActivity", "addProductList: ${productRecyclerView.adapter!!.itemCount}")
+
+        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+        Log.d("ProductAdapter", "Product added at position: ${taskProducts.size - 1}")
+
+        // Notify the adapter about the new item inserte
+
+        Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")
     }
 
     private fun fetchTaskDetails(taskId: String) {
@@ -179,7 +208,7 @@ class TaskActivity : AppCompatActivity() {
         })
     }
 
-    private fun bindData(taskResponse: TaskResponse) {
+    public fun bindData(taskResponse: TaskResponse) {
         val task = taskResponse.task
         val client = task.client
         val point = task.point
@@ -202,7 +231,7 @@ class TaskActivity : AppCompatActivity() {
         pointInstallationDateTextView.text = point.installationDate
 
         // Set up ProductAdapter after fetching the task details
-        productAdapter = ProductAdapter(this, taskProducts, agentProducts)
+        productAdapter = ProductAdapter(this,this, taskProducts, agentProducts)
         productRecyclerView.adapter = productAdapter
     }
 

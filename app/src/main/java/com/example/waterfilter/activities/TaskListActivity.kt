@@ -36,7 +36,6 @@ class TaskListActivity : AppCompatActivity() {
 
     private var locationRunnable: Runnable = Runnable { }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list_task)

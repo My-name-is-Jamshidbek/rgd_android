@@ -1,6 +1,7 @@
 package com.example.waterfilter.adapters
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,12 +13,16 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.data.AgentProduct
-import com.example.waterfilter.data.TaskProduct
+import com.example.waterfilter.vm.MyViewModel
+import okhttp3.internal.notify
 
 class ProductAdapter(
+    private val rq: AppCompatActivity,
     private val context: Context,
     private var taskProducts: MutableList<AgentProduct>,
     private val agentProducts: List<AgentProduct>
@@ -30,21 +35,37 @@ class ProductAdapter(
         val checkBox: CheckBox = view.findViewById(R.id.productCheckbox)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
+    fun observe(taskProducts: List<AgentProduct>) {
+        this.taskProducts = taskProducts.toMutableList()
+        notifyDataSetChanged()
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false)
         return ProductViewHolder(view)
     }
-
+    lateinit var vm: MyViewModel
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+        vm = ViewModelProvider(rq)[MyViewModel::class.java]
         val product = taskProducts[position]
 //        holder.checkBox.isChecked = product.isSelected
 
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
-            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
-                taskProducts[holder.adapterPosition] = taskProducts[holder.adapterPosition].copy(
-                    isSelected = isChecked
-                )
+//            if (holder.adapterPosition != RecyclerView.NO_POSITION) {
+//                taskProducts[holder.adapterPosition] = taskProducts[holder.adapterPosition].copy(
+//                    isSelected = isChecked
+//                )
+//                vm.setProductLiveData(taskProducts)
+//            }
+            Log.d("MainActivity", "onBindViewHolder: Bosildi")
+            if (isChecked) {
+                taskProducts[position].isSelected = true
+                vm.setProductLiveData(taskProducts)
+            } else {
+                taskProducts[position].isSelected = false
+                vm.setProductLiveData(taskProducts)
             }
         }
 
@@ -95,29 +116,29 @@ class ProductAdapter(
 
     override fun getItemCount(): Int = taskProducts.size
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun addProduct() {
-        // Create a new copy of the product
-        val item = agentProducts[0].copy()
-
-
-        // Add the new instance to the taskProducts list
-        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
-        taskProducts.add(item)
-        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
-        Log.d("ProductAdapter", "Product added at position: ${taskProducts.size - 1}")
-
-        // Notify the adapter about the new item inserted
-        if(taskProducts.size == 1){
-
-            notifyDataSetChanged();
-        } else {
-            notifyItemInserted(taskProducts.size - 1)
-            notifyItemRangeChanged(taskProducts.size - 1, taskProducts.size)
-        }
-
-        Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun addProduct() {
+//        // Create a new copy of the product
+//        val item = agentProducts[0].copy()
+//
+//        // Add the new instance to the taskProducts list
+//        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+//        taskProducts.add(item)
+//
+//        Log.d("ProductAdapter", "Products size: ${taskProducts.size}")
+//        Log.d("ProductAdapter", "Product added at position: ${taskProducts.size - 1}")
+//
+//        // Notify the adapter about the new item inserted
+//        if(taskProducts.size == 1){
+//
+//            notifyDataSetChanged();
+//        } else {
+//            notifyItemInserted(taskProducts.size - 1)
+//            notifyItemRangeChanged(taskProducts.size - 1, taskProducts.size)
+//        }
+//
+//        Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")
+//    }
 
 
     fun removeProduct(position: Int) {
