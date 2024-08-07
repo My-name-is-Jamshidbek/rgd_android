@@ -117,18 +117,37 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun sendTaskProductsWithCheckboxResults() {
-        val selectedProducts = taskProducts.map { AgentProduct ->
-            TaskProduct(
-                productId = AgentProduct.product.id,
-                isSelected = AgentProduct.isSelected
-            )
-        }
 
-        // Now send selectedProducts to your server or another activity
-        // For demonstration, we'll just log the results
-        selectedProducts.forEach {
-            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
-        }
+//        Log.d("MainActivity", "taskProducts count: ${taskProducts.count()}")
+//
+//        taskProducts.forEachIndexed { index, agentProduct ->
+//            Log.d("MainActivity", "Index: $index, AgentProduct ID: ${agentProduct.id}, Product ID: ${agentProduct.product.id}, Selected: ${agentProduct.isSelected}")
+//        }
+// Log the contents of taskProducts
+//        taskProducts.forEach {
+//            Log.d("MainActivity", "AgentProduct ID: ${it.id}, Product ID: ${it.product.id}, Selected: ${it.isSelected}")
+//        }
+
+// Map taskProducts to selectedProducts
+        val selectedProducts: MutableList<TaskProduct> = taskProducts.mapIndexed { index, agentProduct ->
+            TaskProduct(
+                productId = agentProduct.product.id,
+                isSelected = agentProduct.isSelected
+            ).also {
+                Log.d("MainActivity", "Mapped Index: $index, Product ID: ${it.productId}, Selected: ${it.isSelected}")
+            }
+        }.toMutableList()
+
+// Log the contents of selectedProducts
+//        selectedProducts.forEach {
+//            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
+//        }
+
+// Now send selectedProducts to your server or another activity
+// For demonstration, we'll just log the results
+//        selectedProducts.forEach {
+//            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
+//        }
 
         // If sending to a server, you might do something like this:
         // sendToServer(selectedProducts)
@@ -136,8 +155,7 @@ class TaskActivity : AppCompatActivity() {
 
     @SuppressLint("NotifyDataSetChanged")
     private fun addProduct() {
-        taskProducts.add(this.agentProduct)
-        productAdapter.notifyDataSetChanged()
+        productAdapter.addProduct()
     }
 
     private fun fetchTaskDetails(taskId: String) {

@@ -15,6 +15,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.data.AgentProduct
+import com.example.waterfilter.data.TaskProduct
 
 class ProductAdapter(
     private val context: Context,
@@ -97,12 +98,24 @@ class ProductAdapter(
 
     override fun getItemCount(): Int = taskProducts.size
 
+    @SuppressLint("NotifyDataSetChanged")
     fun addProduct() {
-        taskProducts.add(agentProducts[0])
-        notifyItemInserted(taskProducts.size - 1)
-        Log.d("ProductAdapter", "Product added: ${agentProducts[0].product.name}")
+        // Create a new copy of the product
+        val newProduct = agentProducts[0].product.copy()
+
+        // Create a new instance of AgentProduct with the copied product
+        val newAgentProduct = agentProducts[0].copy(
+            product = newProduct,
+            isSelected = false // Ensure isSelected is set to false by default
+        )
+
+        // Add the new instance to the taskProducts list
+        taskProducts.add(newAgentProduct)
+        notifyDataSetChanged()
+        Log.d("ProductAdapter", "Product added: ${newAgentProduct.product.name}")
         Log.d("ProductAdapter", "Products: $taskProducts")
     }
+
 
     fun removeProduct(position: Int) {
         taskProducts.removeAt(position)
