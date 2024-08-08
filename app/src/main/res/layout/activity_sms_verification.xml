@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
@@ -11,14 +12,14 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
-        android:text="Enter the code that was sent to"
+        android:text="@string/sms_activity_titel"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/tv_phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="9775545770"
+        android:text="@string/example_phone"
         android:textSize="18sp"
         android:textColor="@android:color/holo_green_dark"
         android:layout_below="@id/tv_instruction"
@@ -42,7 +43,9 @@
             android:gravity="center"
             android:textSize="18sp"
             android:maxLength="1"
-            android:background="@android:drawable/editbox_background" />
+            android:background="@android:drawable/editbox_background"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/et_digit_2"
@@ -53,7 +56,9 @@
             android:textSize="18sp"
             android:maxLength="1"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/et_digit_3"
@@ -64,7 +69,9 @@
             android:textSize="18sp"
             android:maxLength="1"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/et_digit_4"
@@ -75,7 +82,9 @@
             android:textSize="18sp"
             android:maxLength="1"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/et_digit_5"
@@ -86,7 +95,9 @@
             android:textSize="18sp"
             android:maxLength="1"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
 
         <EditText
             android:id="@+id/et_digit_6"
@@ -97,7 +108,9 @@
             android:textSize="18sp"
             android:maxLength="1"
             android:background="@android:drawable/editbox_background"
-            android:layout_marginStart="8dp" />
+            android:layout_marginStart="8dp"
+            android:importantForAutofill="no"
+            tools:ignore="LabelFor" />
     </LinearLayout>
 
     <TextView
@@ -117,7 +130,7 @@
         android:id="@+id/btn_resend_sms"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Resend SMS"
+        android:text="@string/resend_sms_btn_text"
         android:layout_below="@id/tv_countdown"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
@@ -127,7 +140,7 @@
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CONTINUE"
+        android:text="@string/continue_btn_text"
         android:textColor="@android:color/white"
         android:layout_below="@id/btn_resend_sms"
         android:layout_centerHorizontal="true"

@@ -46,4 +46,8 @@
     <string name="product_price">Mahsulot narxi</string>
     <string name="add_service_btn_text">Servis qo`shish</string>
     <string name="complete_task">Ishni yakunlash</string>
+    <string name="sms_activity_titel">Quyidagi raqamga yuborilgan kodni kiriting</string>
+    <string name="example_phone">914285153</string>
+    <string name="resend_sms_btn_text">Qayta yuborish</string>
+    <string name="continue_btn_text">Davom etish</string>
 </resources>
