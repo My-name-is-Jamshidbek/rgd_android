@@ -71,7 +71,7 @@ class TaskActivity : AppCompatActivity() {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
@@ -118,6 +118,12 @@ class TaskActivity : AppCompatActivity() {
         val sendButton: Button = findViewById(R.id.completeButton)
         sendButton.setOnClickListener {
             sendTaskProductsWithCheckboxResults()
+        }
+
+        val sendPointLocation: Button = findViewById(R.id.setLoctionButton)
+
+        sendPointLocation.setOnClickListener {
+            requestLocationPermission()
         }
 
         // Fetch task details

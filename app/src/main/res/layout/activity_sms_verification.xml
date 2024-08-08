@@ -1,13 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/tv_instruction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
         android:text="Enter the code that was sent to"
         android:textSize="16sp" />
 
@@ -97,13 +100,36 @@
             android:layout_marginStart="8dp" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_countdown"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/codeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:textSize="16sp"
+        android:visibility="visible" />
+
+    <Button
+        android:id="@+id/btn_resend_sms"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Resend SMS"
+        android:layout_below="@id/tv_countdown"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:visibility="gone"/>
+
     <Button
         android:id="@+id/btn_continue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="CONTINUE"
         android:textColor="@android:color/white"
-        android:layout_below="@id/codeLayout"
+        android:layout_below="@id/btn_resend_sms"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="32dp"
         android:padding="12dp"/>

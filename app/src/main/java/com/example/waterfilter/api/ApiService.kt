@@ -47,6 +47,7 @@ interface ApiService {
 
     @POST("task/{id}/verify")
     fun verifySmsCode(
+        @Header("Authorization") token: String,
         @Path("id") taskId: String,
         @Body request: Map<String, Int>
     ): Call<JsonResponse>

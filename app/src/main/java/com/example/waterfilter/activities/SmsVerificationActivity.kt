@@ -1,6 +1,8 @@
 package com.example.waterfilter.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Button
@@ -15,11 +17,14 @@ import com.example.waterfilter.api.JsonResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.concurrent.TimeUnit
 
 class SmsVerificationActivity : AppCompatActivity() {
 
     private lateinit var tvPhoneNumber: TextView
+    private lateinit var tvCountdown: TextView
     private lateinit var btnContinue: Button
+    private lateinit var btnResendSms: Button
     private lateinit var editTexts: Array<EditText>
     private lateinit var apiService: ApiService
     private lateinit var taskId: String
@@ -33,7 +38,9 @@ class SmsVerificationActivity : AppCompatActivity() {
         phoneNumber = intent.getStringExtra("PHONE") ?: ""
 
         tvPhoneNumber = findViewById(R.id.tv_phone_number)
+        tvCountdown = findViewById(R.id.tv_countdown)
         btnContinue = findViewById(R.id.btn_continue)
+        btnResendSms = findViewById(R.id.btn_resend_sms)
         editTexts = arrayOf(
             findViewById(R.id.et_digit_1),
             findViewById(R.id.et_digit_2),
@@ -48,6 +55,7 @@ class SmsVerificationActivity : AppCompatActivity() {
         tvPhoneNumber.text = phoneNumber
 
         setupEditTexts()
+        startCountdown()
 
         btnContinue.setOnClickListener {
             val smsCode = editTexts.joinToString("") { it.text.toString() }
@@ -57,7 +65,14 @@ class SmsVerificationActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please enter a valid 6-digit code", Toast.LENGTH_SHORT).show()
             }
         }
+
+        btnResendSms.setOnClickListener {
+            // Implement the logic to resend the SMS
+            resendSmsCode()
+            startCountdown() // Restart the countdown after resending the SMS
+        }
     }
+
     private fun setupEditTexts() {
         for (i in editTexts.indices) {
             editTexts[i].addTextChangedListener(object : TextWatcher {
@@ -78,13 +93,34 @@ class SmsVerificationActivity : AppCompatActivity() {
         }
     }
 
+    private fun startCountdown() {
+        btnResendSms.visibility = Button.GONE
+        tvCountdown.visibility = TextView.VISIBLE
+
+        object : CountDownTimer(3 * 60 * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val minutes = TimeUnit.MILLISECONDS.toMinutes(millisUntilFinished)
+                val seconds = TimeUnit.MILLISECONDS.toSeconds(millisUntilFinished) % 60
+                tvCountdown.text = String.format("%02d:%02d", minutes, seconds)
+            }
+
+            override fun onFinish() {
+                tvCountdown.visibility = TextView.GONE
+                btnResendSms.visibility = Button.VISIBLE
+            }
+        }.start()
+    }
+
     private fun verifySmsCode(taskId: String, code: String) {
         val request = mapOf("code" to code.toInt())
-        apiService.verifySmsCode(taskId, request).enqueue(object : Callback<JsonResponse> {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", "") ?: return
+        apiService.verifySmsCode("Bearer $token", taskId, request).enqueue(object : Callback<JsonResponse> {
             override fun onResponse(call: Call<JsonResponse>, response: Response<JsonResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
                     Toast.makeText(this@SmsVerificationActivity, "Verification successful", Toast.LENGTH_SHORT).show()
-                    // Handle successful verification
+                    val intent = Intent(this@SmsVerificationActivity, TaskListActivity::class.java)
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this@SmsVerificationActivity, "Verification failed", Toast.LENGTH_SHORT).show()
                 }
@@ -94,5 +130,10 @@ class SmsVerificationActivity : AppCompatActivity() {
                 Toast.makeText(this@SmsVerificationActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun resendSmsCode() {
+        // Implement the logic to resend the SMS code
+        Toast.makeText(this, "SMS resent", Toast.LENGTH_SHORT).show()
     }
 }
