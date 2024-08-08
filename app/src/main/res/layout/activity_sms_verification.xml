@@ -1,0 +1,111 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/tv_instruction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Enter the code that was sent to"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tv_phone_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="9775545770"
+        android:textSize="18sp"
+        android:textColor="@android:color/holo_green_dark"
+        android:layout_below="@id/tv_instruction"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="8dp"/>
+
+    <LinearLayout
+        android:id="@+id/codeLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_phone_number"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/et_digit_1"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background" />
+
+        <EditText
+            android:id="@+id/et_digit_2"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp" />
+
+        <EditText
+            android:id="@+id/et_digit_3"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp" />
+
+        <EditText
+            android:id="@+id/et_digit_4"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp" />
+
+        <EditText
+            android:id="@+id/et_digit_5"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp" />
+
+        <EditText
+            android:id="@+id/et_digit_6"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:inputType="number"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:maxLength="1"
+            android:background="@android:drawable/editbox_background"
+            android:layout_marginStart="8dp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CONTINUE"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/codeLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="32dp"
+        android:padding="12dp"/>
+
+</RelativeLayout>

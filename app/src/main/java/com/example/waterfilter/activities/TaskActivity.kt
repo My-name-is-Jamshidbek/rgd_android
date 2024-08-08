@@ -2,6 +2,8 @@ package com.example.waterfilter.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -21,12 +23,18 @@ import com.example.waterfilter.adapters.ProductAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.AgentProduct
-import com.example.waterfilter.data.Product
 import com.example.waterfilter.data.SetPointLocationRequest
+import com.example.waterfilter.data.ProductRequest
 import com.example.waterfilter.data.TaskProduct
 import com.example.waterfilter.data.TaskResponse
+import com.example.waterfilter.data.setTaskProductResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -117,43 +125,46 @@ class TaskActivity : AppCompatActivity() {
     }
 
     private fun sendTaskProductsWithCheckboxResults() {
+        val selectedProducts = taskProducts.map { agentProduct ->
+            TaskProduct(agentProduct.id, agentProduct.isSelected, agentProduct.price, agentProduct.servicePrice)
+        }
 
-//        Log.d("MainActivity", "taskProducts count: ${taskProducts.count()}")
-//
-//        taskProducts.forEachIndexed { index, agentProduct ->
-//            Log.d("MainActivity", "Index: $index, AgentProduct ID: ${agentProduct.id}, Product ID: ${agentProduct.product.id}, Selected: ${agentProduct.isSelected}")
-//        }
-// Log the contents of taskProducts
-//        taskProducts.forEach {
-//            Log.d("MainActivity", "AgentProduct ID: ${it.id}, Product ID: ${it.product.id}, Selected: ${it.isSelected}")
-//        }
-
-// Map taskProducts to selectedProducts
-        val selectedProducts: MutableList<TaskProduct> = taskProducts.mapIndexed { index, agentProduct ->
-            TaskProduct(
-                productId = agentProduct.product.id,
-                isSelected = agentProduct.isSelected
-            ).also {
-                Log.d("MainActivity", "Mapped Index: $index, Product ID: ${it.productId}, Selected: ${it.isSelected}")
-            }
-        }.toMutableList()
-
-// Log the contents of selectedProducts
-//        selectedProducts.forEach {
-//            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
-//        }
-
-// Now send selectedProducts to your server or another activity
-// For demonstration, we'll just log the results
-//        selectedProducts.forEach {
-//            Log.d("MainActivity", "Product ID: ${it.productId}, Selected: ${it.isSelected}")
-//        }
-
-        // If sending to a server, you might do something like this:
-        // sendToServer(selectedProducts)
+        val setTaskRequest = ProductRequest(selectedProducts)
+        sendToServer(setTaskRequest, taskId)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun sendToServer(productRequest: ProductRequest, taskId: String) {
+        val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
+        val token = sharedPreferences.getString("token", "") ?: return
+
+        GlobalScope.launch(Dispatchers.IO) {
+            try {
+                val response = apiService.setTaskProducts("Bearer $token", taskId, productRequest).execute()
+                withContext(Dispatchers.Main) {
+                    if (response.isSuccessful) {
+                        Log.d(ContentValues.TAG, "Task products sent successfully")
+                        Toast.makeText(this@TaskActivity, "Task products sent successfully", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@TaskActivity, SmsVerificationActivity::class.java)
+                        intent.putExtra("TASK_ID", taskId)
+                        intent.putExtra("PHONE", clientPhoneTextView.text)
+                        startActivity(intent)
+                        } else {
+                        Log.e(ContentValues.TAG, "Failed to send task products: ${response.code()}")
+                        Toast.makeText(this@TaskActivity, "Failed to send task products", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Log.e(ContentValues.TAG, "Error sending task products", e)
+                    Toast.makeText(this@TaskActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
+@SuppressLint("NotifyDataSetChanged")
     private fun addProduct() {
         productAdapter.addProduct()
     }

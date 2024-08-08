@@ -30,6 +30,7 @@
         <activity android:name=".activities.TaskListActivity" />
         <activity android:name=".activities.SettingsActivity" />
         <activity android:name=".activities.TaskActivity" />
+        <activity android:name=".activities.SmsVerificationActivity" />
 
         <service
             android:name=".LocationService"

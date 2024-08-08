@@ -1,6 +1,8 @@
 package com.example.waterfilter.data
 
 data class TaskProduct(
-    val productId: Int,
-    val isSelected: Boolean
+    val id: Int,
+    val isFree: Boolean,
+    val price: Int,
+    val servicePrice: Int,
 )

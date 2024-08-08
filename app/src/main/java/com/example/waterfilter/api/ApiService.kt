@@ -3,18 +3,10 @@ package com.example.waterfilter.api
 import com.example.locationapp.LocationData
 import com.example.waterfilter.api.Login.LoginRequest
 import com.example.waterfilter.api.Login.LoginResponse
-import com.example.waterfilter.data.SetPointLocationRequest
-import com.example.waterfilter.data.TaskListResponse
-import com.example.waterfilter.data.TaskResponse
-import com.example.waterfilter.data.User
+import com.example.waterfilter.data.*
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.PUT
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface ApiService {
     @POST("login/")
@@ -25,7 +17,6 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body user: User
     ): Response<User>
-
 
     @POST("set-location")
     suspend fun updateLocation(
@@ -44,6 +35,20 @@ interface ApiService {
         @Path("id") id: Int
     ): Call<TaskResponse>
 
+    @POST("task/{id}/complete")
+    fun setTaskProducts(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
+        @Body products: ProductRequest
+    ): Call<Void>
+
     @PUT("point/location")
     fun setPointLocation(@Header("Authorization") token: String, @Body request: SetPointLocationRequest): Call<Void>
+
+    @POST("task/{id}/verify")
+    fun verifySmsCode(
+        @Path("id") taskId: String,
+        @Body request: Map<String, Int>
+    ): Call<JsonResponse>
+
 }
