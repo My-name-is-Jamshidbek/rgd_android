@@ -1,4 +1,4 @@
-package com.example.waterfilter.activities
+package com.example.waterfilter.activities.menu
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -11,10 +11,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.example.waterfilter.R
+import com.example.waterfilter.activities.pages.LoginActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.User
 import com.example.waterfilter.databinding.ActivitySettingsBinding
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -24,6 +26,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var apiService: ApiService
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     @SuppressLint("CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,7 @@ class SettingsActivity : AppCompatActivity() {
         val userName = sharedPreferences.getString("userName", "N/A")
         val userPhone = sharedPreferences.getString("userPhone", "N/A")
 
-        val userNameEditText: EditText = findViewById(R.id.editFullname)
+        val userNameEditText: EditText = findViewById(R.id.editFullName)
         val userPhoneEditText: EditText = findViewById(R.id.editPhone)
         val userOldPasswordEditText: EditText = findViewById(R.id.oldPassword)
         val userNewPasswordText: EditText = findViewById(R.id.editNewPassword)
@@ -44,8 +47,12 @@ class SettingsActivity : AppCompatActivity() {
         userNameEditText.setText(userName)
         userPhoneEditText.setText(userPhone)
 
-        val toolbar: Toolbar = findViewById(R.id.Toolbar)
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        // Initialize BottomNavigationView
+        bottomNavigationView = findViewById(R.id.nav_view)
+        setupBottomNavigation()
 
         apiService = ApiClient.getApiService(this)
 
@@ -65,6 +72,45 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupBottomNavigation() {
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    // Perform action for Home
+                    Toast.makeText(this, "Home selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentTaskListActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_history -> {
+                    // Perform action for History
+                    Toast.makeText(this, "History selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentHistoryActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_products -> {
+                    // Perform action for Products
+                    Toast.makeText(this, "Products selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentProductsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_profile -> {
+                    // Perform action for Profile
+                    Toast.makeText(this, "Profile selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
     private fun updateUserData(user: User, userOldPasswordEditText: EditText, userNewPasswordText: EditText, userNewPasswordConfirmText: EditText) {
         CoroutineScope(Dispatchers.IO).launch {
             try {

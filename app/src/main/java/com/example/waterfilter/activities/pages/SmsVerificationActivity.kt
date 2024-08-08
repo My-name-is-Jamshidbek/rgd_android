@@ -1,4 +1,4 @@
-package com.example.waterfilter.activities
+package com.example.waterfilter.activities.pages
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.waterfilter.R
+import com.example.waterfilter.activities.menu.AgentTaskListActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.api.JsonResponse
@@ -119,7 +120,7 @@ class SmsVerificationActivity : AppCompatActivity() {
             override fun onResponse(call: Call<JsonResponse>, response: Response<JsonResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
                     Toast.makeText(this@SmsVerificationActivity, "Verification successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@SmsVerificationActivity, TaskListActivity::class.java)
+                    val intent = Intent(this@SmsVerificationActivity, AgentTaskListActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(this@SmsVerificationActivity, "Verification failed", Toast.LENGTH_SHORT).show()

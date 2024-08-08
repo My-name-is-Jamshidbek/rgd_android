@@ -5,15 +5,15 @@
         android:icon="@drawable/ic_baseline_home_24"
         android:title="@string/title_home" />
     <item
-        android:id="@+id/navigation_wallet"
+        android:id="@+id/navigation_history"
         android:icon="@drawable/ic_baseline_search_24"
-        android:title="@string/title_wallet" />
+        android:title="@string/title_history" />
     <item
-        android:id="@+id/navigation_chart"
+        android:id="@+id/navigation_products"
         android:icon="@drawable/person_icon"
-        android:title="@string/title_chart" />
+        android:title="@string/title_products" />
     <item
         android:id="@+id/navigation_profile"
         android:icon="@drawable/ic_baseline_settings_24"
-        android:title="@string/title_profile" />
+        android:title="@string/title_settings" />
 </menu>

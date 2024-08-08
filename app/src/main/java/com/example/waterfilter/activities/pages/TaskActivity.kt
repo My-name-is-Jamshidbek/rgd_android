@@ -1,4 +1,4 @@
-package com.example.waterfilter.activities
+package com.example.waterfilter.activities.pages
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -27,9 +27,9 @@ import com.example.waterfilter.data.SetPointLocationRequest
 import com.example.waterfilter.data.ProductRequest
 import com.example.waterfilter.data.TaskProduct
 import com.example.waterfilter.data.TaskResponse
-import com.example.waterfilter.data.setTaskProductResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -66,6 +66,8 @@ class TaskActivity : AppCompatActivity() {
     private var taskProducts: MutableList<AgentProduct> = mutableListOf() // Initialize with an empty list
     private lateinit var agentProduct: AgentProduct
     private var agentProducts: List<AgentProduct> = emptyList() // Initialize with an empty list
+
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -130,6 +132,7 @@ class TaskActivity : AppCompatActivity() {
         fetchTaskDetails(taskId)
     }
 
+
     private fun sendTaskProductsWithCheckboxResults() {
         val selectedProducts = taskProducts.map { agentProduct ->
             TaskProduct(agentProduct.id, agentProduct.isSelected, agentProduct.price, agentProduct.servicePrice)
@@ -155,7 +158,7 @@ class TaskActivity : AppCompatActivity() {
                         intent.putExtra("TASK_ID", taskId)
                         intent.putExtra("PHONE", clientPhoneTextView.text)
                         startActivity(intent)
-                        } else {
+                    } else {
                         Log.e(ContentValues.TAG, "Failed to send task products: ${response.code()}")
                         Toast.makeText(this@TaskActivity, "Failed to send task products", Toast.LENGTH_SHORT).show()
                     }
@@ -170,7 +173,7 @@ class TaskActivity : AppCompatActivity() {
     }
 
 
-@SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged")
     private fun addProduct() {
         productAdapter.addProduct()
     }

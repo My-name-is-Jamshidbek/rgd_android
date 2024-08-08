@@ -12,12 +12,10 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.activities.TaskActivity
+import com.example.waterfilter.activities.pages.TaskActivity
 import com.example.waterfilter.data.AgentProduct
-import com.example.waterfilter.data.TaskProduct
 
 class ProductAdapter(
     private val context: Context,

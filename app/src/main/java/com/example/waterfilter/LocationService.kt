@@ -15,7 +15,7 @@ import androidx.annotation.Nullable
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import com.example.locationapp.LocationData
-import com.example.waterfilter.activities.LoginActivity
+import com.example.waterfilter.activities.pages.LoginActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.google.android.gms.location.FusedLocationProviderClient

@@ -1,9 +1,10 @@
-package com.example.waterfilter.activities
+package com.example.waterfilter.activities.pages
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.waterfilter.activities.menu.AgentTaskListActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.Login.LoginRequest
 import com.example.waterfilter.api.Login.LoginResponse
@@ -21,8 +22,8 @@ class LoginActivity : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         if (isLoggedIn) {
-            // User is already logged in, navigate to TaskListActivity
-            val intent = Intent(this, TaskListActivity::class.java)
+            // User is already logged in, navigate to AgentTaskListActivity
+            val intent = Intent(this, AgentTaskListActivity::class.java)
             startActivity(intent)
             finish()  // Close the current activity
         } else {
@@ -58,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                         editor.apply()
 
                         Toast.makeText(this@LoginActivity, "Kirildi", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@LoginActivity, TaskListActivity::class.java)
+                        val intent = Intent(this@LoginActivity, AgentTaskListActivity::class.java)
                         startActivity(intent)
                         finish()  // Optional: Close the login activity
                     }

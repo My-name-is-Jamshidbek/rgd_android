@@ -1,4 +1,4 @@
-package com.example.waterfilter.activities
+package com.example.waterfilter.activities.menu
 
 import android.Manifest
 import android.content.Intent
@@ -26,16 +26,20 @@ import com.example.waterfilter.data.TaskListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.waterfilter.activities.pages.LoginActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
-class TaskListActivity : AppCompatActivity() {
+class AgentTaskListActivity : AppCompatActivity() {
 
     private val LocationCode = 1000
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var apiService: ApiService
     private lateinit var recyclerView: RecyclerView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var bottomNavigationView: BottomNavigationView
 
     private var locationRunnable: Runnable = Runnable { }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +48,11 @@ class TaskListActivity : AppCompatActivity() {
         val toolbar: Toolbar = findViewById(R.id.Toolbar)
         setSupportActionBar(toolbar)
 
+        // Initialize BottomNavigationView
+        bottomNavigationView = findViewById(R.id.nav_view)
+        setupBottomNavigation()
+
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -51,29 +60,74 @@ class TaskListActivity : AppCompatActivity() {
 
         fetchTasks()
         checkPermissions()
+
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchTasks()
+        }
     }
 
+    private fun setupBottomNavigation() {
+        bottomNavigationView.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.navigation_home -> {
+                    // Perform action for Home
+                    Toast.makeText(this, "Home selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentTaskListActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_history -> {
+                    // Perform action for History
+                    Toast.makeText(this, "History selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentHistoryActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_products -> {
+                    // Perform action for Products
+                    Toast.makeText(this, "Products selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, AgentProductsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                R.id.navigation_profile -> {
+                    // Perform action for Profile
+                    Toast.makeText(this, "Profile selected", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, SettingsActivity::class.java)
+                    startActivity(intent)
+                    finish()
+                    true
+                }
+                else -> false
+            }
+        }
+    }
     private fun fetchTasks() {
         val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
         val token = sharedPreferences.getString("token", "") ?: return
 
         apiService.getTasks("Bearer $token").enqueue(object : Callback<TaskListResponse> {
             override fun onResponse(call: Call<TaskListResponse>, response: Response<TaskListResponse>) {
+                swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.tasks?.let { tasks ->
-                        Toast.makeText(this@TaskListActivity, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
-                        val taskListAdapter = TaskListAdapter(this@TaskListActivity, tasks)
+                        Toast.makeText(this@AgentTaskListActivity, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
+                        val taskListAdapter = TaskListAdapter(this@AgentTaskListActivity, tasks)
                         recyclerView.adapter = taskListAdapter
                     } ?: run {
-                        Toast.makeText(this@TaskListActivity, "No tasks available", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@AgentTaskListActivity, "No tasks available", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(this@TaskListActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@AgentTaskListActivity, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
-                Toast.makeText(this@TaskListActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+                swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(this@AgentTaskListActivity, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }

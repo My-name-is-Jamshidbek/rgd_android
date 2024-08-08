@@ -10,11 +10,9 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.activities.TaskActivity
-import com.example.waterfilter.activities.TaskListActivity
+import com.example.waterfilter.activities.pages.TaskActivity
 import com.example.waterfilter.data.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
