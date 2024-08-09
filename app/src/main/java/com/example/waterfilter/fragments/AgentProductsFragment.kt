@@ -16,7 +16,6 @@ import com.example.waterfilter.activities.pages.LoginActivity
 import com.example.waterfilter.adapters.AgentProductsListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.data.common.AgentProduct
 import com.example.waterfilter.data.getProducts.AgentProductsListResponse
 import retrofit2.Call
 import retrofit2.Callback
@@ -65,7 +64,7 @@ class AgentProductsFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                             val agentProductsListAdapter =
-                                AgentProductsListAdapter(requireContext(), products)
+                                AgentProductsListAdapter(products)
                             recyclerView.adapter = agentProductsListAdapter
                         } else {
                             Toast.makeText(context, "Agent mahsulotlari aniqlanmadi", Toast.LENGTH_SHORT).show()

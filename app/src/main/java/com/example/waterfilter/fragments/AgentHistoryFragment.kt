@@ -16,7 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.LoginActivity
 import com.example.waterfilter.adapters.CompletedTaskListAdapter
-import com.example.waterfilter.adapters.TaskListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.completedTasks.CompletedTasksRequest
@@ -97,7 +96,7 @@ class AgentHistoryFragment : Fragment() {
         return view
     }
 
-    private fun fetchTasks(date: Date) {
+    private fun fetchTasks(selectedDate: Date) {
         val sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", AppCompatActivity.MODE_PRIVATE)
         val token = sharedPreferences.getString("token", "") ?: return
         val request = CompletedTasksRequest(completed_time = dateFormat.format(selectedDate).toString())
