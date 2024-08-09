@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -116,6 +117,7 @@ class LocationService : Service() {
         return null
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun sendLocationToServer(latitude: Double, longitude: Double) {
         val locationData = LocationData(latitude, longitude)
         val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
@@ -134,20 +136,20 @@ class LocationService : Service() {
                 val response: Response<Void> = apiService.updateLocation("Bearer $token", locationData)
                 if (response.isSuccessful) {
                     Log.d(TAG, "sendLocationToServer: Location sent successfully: ${response.message()}")
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Toast.makeText(this@LocationService, "Location sent successfully", Toast.LENGTH_SHORT).show()
-                    }
+//                    GlobalScope.launch(Dispatchers.Main) {
+//                        Toast.makeText(this@LocationService, "Location sent successfully", Toast.LENGTH_SHORT).show()
+//                    }
                 } else {
                     Log.e(TAG, "sendLocationToServer: Failed to send location: ${response.code()} - ${response.message()}")
-                    GlobalScope.launch(Dispatchers.Main) {
-                        Toast.makeText(this@LocationService, "Failed to send location", Toast.LENGTH_SHORT).show()
-                    }
+//                    GlobalScope.launch(Dispatchers.Main) {
+//                        Toast.makeText(this@LocationService, "Failed to send location", Toast.LENGTH_SHORT).show()
+//                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "sendLocationToServer: Error sending location", e)
-                GlobalScope.launch(Dispatchers.Main) {
-                    Toast.makeText(this@LocationService, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
+//                GlobalScope.launch(Dispatchers.Main) {
+//                    Toast.makeText(this@LocationService, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+//                }
             }
         }
     }
