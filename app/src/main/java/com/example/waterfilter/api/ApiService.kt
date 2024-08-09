@@ -41,7 +41,7 @@ interface ApiService {
         @Path("id") id: Int
     ): Call<TaskResponse>
 
-    @POST("task/{id}/complete")
+    @POST("tasks/{id}/complete")
     fun setTaskProducts(
         @Header("Authorization") token: String,
         @Path("id") id: String,
@@ -51,11 +51,17 @@ interface ApiService {
     @PUT("point/location")
     fun setPointLocation(@Header("Authorization") token: String, @Body request: SetPointLocationRequest): Call<Void>
 
-    @POST("task/{id}/verify")
+    @POST("tasks/{id}/verify")
     fun verifySmsCode(
         @Header("Authorization") token: String,
         @Path("id") taskId: String,
         @Body request: Map<String, Int>
     ): Call<JsonResponse>
+
+    @POST("tasks/completed")
+    fun completedTasks(
+        @Header("Authorization") token: String,
+        @Body request: Map<String, String>
+    ): Call<TaskListResponse>
 
 }
