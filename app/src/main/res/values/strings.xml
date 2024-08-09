@@ -55,4 +55,5 @@
     <string name="productsDesc">Sizda mavjud mahsulotlar ro`yxati</string>
     <string name="historyDesc">Tugatgan ishlaringiz ro`yxati</string>
     <string name="select_day_text">Kunni tanlash</string>
+    <string name="product_type">product type</string>
 </resources>
