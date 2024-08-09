@@ -19,6 +19,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.waterfilter.R
 import com.example.waterfilter.adapters.ProductAdapter
 import com.example.waterfilter.api.ApiClient
@@ -59,6 +60,7 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var pointExpireDateTextView: TextView
     private lateinit var pointExpireTextView: TextView
     private lateinit var pointInstallationDateTextView: TextView
+    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var productRecyclerView: RecyclerView
     private lateinit var addProductButton: Button
@@ -72,7 +74,7 @@ class TaskActivity : AppCompatActivity() {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
     }
 
-    @SuppressLint("NotifyDataSetChanged", "CutPasteId")
+    @SuppressLint("NotifyDataSetChanged", "CutPasteId", "MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_page_task)
@@ -100,6 +102,7 @@ class TaskActivity : AppCompatActivity() {
         pointExpireDateTextView = findViewById(R.id.pointExpireDateTextView)
         pointExpireTextView = findViewById(R.id.pointExpireTextView)
         pointInstallationDateTextView = findViewById(R.id.pointInstallationDateTextView)
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
 
         // Initialize RecyclerView for products
@@ -126,7 +129,9 @@ class TaskActivity : AppCompatActivity() {
         sendPointLocation.setOnClickListener {
             requestLocationPermission()
         }
-
+        swipeRefreshLayout.setOnRefreshListener {
+            fetchTaskDetails(taskId)
+        }
         // Fetch task details
         fetchTaskDetails(taskId)
     }
@@ -157,9 +162,22 @@ class TaskActivity : AppCompatActivity() {
                         intent.putExtra("TASK_ID", taskId)
                         intent.putExtra("PHONE", clientPhoneTextView.text)
                         startActivity(intent)
+                    } else if (response.code() == 401) {
+                        // Handle unauthorized access (401)
+                        Toast.makeText(this@TaskActivity, "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+
+                        // Clear shared preferences or any stored user session data
+                        val editor = sharedPreferences.edit()
+                        editor.clear()
+                        editor.apply()
+
+                        // Redirect the user to the login activity
+                        val intent = Intent(this@TaskActivity, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
+                        startActivity(intent)
                     } else {
-                        Log.e(ContentValues.TAG, "Failed to send task products: ${response.code()}")
-                        Toast.makeText(this@TaskActivity, "Xatolik yuz berdi!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TaskActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
+                        Log.e(ContentValues.TAG, " to Failedsend task products: ${response.code()}")
                     }
                 }
             } catch (e: Exception) {
@@ -189,12 +207,12 @@ class TaskActivity : AppCompatActivity() {
                         bindData(it)
                     }
                 } else {
-                    Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@TaskActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TaskActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
             }
         })
     }

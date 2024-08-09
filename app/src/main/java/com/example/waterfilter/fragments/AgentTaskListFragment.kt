@@ -1,5 +1,6 @@
 package com.example.waterfilter.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.waterfilter.activities.pages.LoginActivity
 
 class AgentTaskListFragment : Fragment() {
 
@@ -55,21 +57,46 @@ class AgentTaskListFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.tasks?.let { tasks ->
-                        Toast.makeText(context, "Vazifalar soni: ${tasks.count()}", Toast.LENGTH_SHORT).show()
-                        val taskListAdapter = TaskListAdapter(requireContext(), tasks)
-                        recyclerView.adapter = taskListAdapter
+                        if (tasks.isNotEmpty()) {
+                            Toast.makeText(
+                                context,
+                                "Vazifalar soni: ${tasks.count()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val taskListAdapter = TaskListAdapter(requireContext(), tasks)
+                            recyclerView.adapter = taskListAdapter
+                        } else if (response.code() == 401) {
+                            // Handle unauthorized access (401)
+                            Toast.makeText(requireContext(), "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+
+                            // Clear shared preferences or any stored user session data
+                            val editor = sharedPreferences.edit()
+                            editor.clear()
+                            editor.apply()
+
+                            // Redirect the user to the login activity
+                            val intent = Intent(requireContext(), LoginActivity::class.java)
+                            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
+                            startActivity(intent)
+                        } else {
+                            Toast.makeText(
+                                context,
+                                "Vazifalar aniqlanmadi",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     } ?: run {
                         Toast.makeText(context, "Vazifalar topilmadi", Toast.LENGTH_SHORT).show()
                     }
                 } else {
-                    Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
                 swipeRefreshLayout.isRefreshing = false
-                Toast.makeText(context, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(context, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

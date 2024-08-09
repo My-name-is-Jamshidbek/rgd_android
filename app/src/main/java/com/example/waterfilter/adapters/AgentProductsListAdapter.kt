@@ -28,7 +28,7 @@ class AgentProductsListAdapter(private val context: Context, private val product
         val currentProduct = productList[position]
         holder.productNameTextView.text = "${currentProduct.product.name} ${currentProduct.quantity} ta"
         holder.productPriceTextView.text = "${currentProduct.price}/${currentProduct.servicePrice}"
-        holder.productTypeTextView.text = if (currentProduct.product.type == 0) "Filter" else "Mahsulot"
+        holder.productTypeTextView.text = if (currentProduct.product.type == 1) "Filter" else "Mahsulot"
     }
 
     override fun getItemCount() = productList.size

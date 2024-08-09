@@ -122,6 +122,19 @@ class SmsVerificationActivity : AppCompatActivity() {
                     Toast.makeText(this@SmsVerificationActivity, "Tasdiqlash muvaffaqiyatli", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@SmsVerificationActivity, MainActivity::class.java)
                     startActivity(intent)
+                } else if (response.code() == 401) {
+                    // Handle unauthorized access (401)
+                    Toast.makeText(this@SmsVerificationActivity, "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+
+                    // Clear shared preferences or any stored user session data
+                    val editor = sharedPreferences.edit()
+                    editor.clear()
+                    editor.apply()
+
+                    // Redirect the user to the login activity
+                    val intent = Intent(this@SmsVerificationActivity, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
+                    startActivity(intent)
                 } else {
                     Toast.makeText(this@SmsVerificationActivity, "Tasdiqlash muvaffaqiyatsiz", Toast.LENGTH_SHORT).show()
                 }

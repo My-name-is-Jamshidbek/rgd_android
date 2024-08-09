@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.LoginActivity
@@ -94,6 +95,9 @@ class SettingsFragment : Fragment() {
                         when (response.code()) {
                             401 -> {
                                 Toast.makeText(requireContext(), "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+                                val editor = sharedPreferences.edit()
+                                editor.clear()
+                                editor.apply()
                                 val intent = Intent(requireContext(), LoginActivity::class.java)
                                 startActivity(intent)
                                 requireActivity().finish()
@@ -111,6 +115,7 @@ class SettingsFragment : Fragment() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
+                    Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(requireContext(), "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }

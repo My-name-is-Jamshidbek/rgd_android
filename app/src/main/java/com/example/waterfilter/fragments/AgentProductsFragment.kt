@@ -1,5 +1,6 @@
 package com.example.waterfilter.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.waterfilter.R
+import com.example.waterfilter.activities.pages.LoginActivity
 import com.example.waterfilter.adapters.AgentProductsListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
@@ -56,12 +58,34 @@ class AgentProductsFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.products?.let { products ->
-                        Toast.makeText(context, "Agent mahsulotlari soni: ${products.count()}", Toast.LENGTH_SHORT).show()
-                        val agentProductsListAdapter = AgentProductsListAdapter(requireContext(), products)
-                        recyclerView.adapter = agentProductsListAdapter
+                        if (products.isNotEmpty()) {
+                            Toast.makeText(
+                                context,
+                                "Agent mahsulotlari soni: ${products.count()}",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            val agentProductsListAdapter =
+                                AgentProductsListAdapter(requireContext(), products)
+                            recyclerView.adapter = agentProductsListAdapter
+                        } else {
+                            Toast.makeText(context, "Agent mahsulotlari aniqlanmadi", Toast.LENGTH_SHORT).show()
+                        }
                     } ?: run {
                         Toast.makeText(context, "Mahsulotlar mavjud emas", Toast.LENGTH_SHORT).show()
                     }
+                } else if (response.code() == 401) {
+                    // Handle unauthorized access (401)
+                    Toast.makeText(requireContext(), "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+
+                    // Clear shared preferences or any stored user session data
+                    val editor = sharedPreferences.edit()
+                    editor.clear()
+                    editor.apply()
+
+                    // Redirect the user to the login activity
+                    val intent = Intent(requireContext(), LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
+                    startActivity(intent)
                 } else {
                     Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
