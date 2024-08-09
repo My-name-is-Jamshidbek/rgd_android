@@ -13,9 +13,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.data.common.Demo
+import com.example.waterfilter.data.common.Point
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class CompletedTaskListAdapter(private val context: Context, private val demoList: List<Demo>) : RecyclerView.Adapter<CompletedTaskListAdapter.TaskViewHolder>() {
+class CompletedTaskListAdapter(private val context: Context, private val demoList: List<Point>) : RecyclerView.Adapter<CompletedTaskListAdapter.TaskViewHolder>() {
 
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val fullNameTextView: TextView = itemView.findViewById(R.id.fullNameTextView)
@@ -33,10 +34,10 @@ class CompletedTaskListAdapter(private val context: Context, private val demoLis
         val currentTask = demoList[position]
         holder.fullNameTextView.text = currentTask.client.name
         holder.phoneTextView.text = currentTask.client.phone
-        holder.addressTextView.text = currentTask.point.address
+        holder.addressTextView.text = currentTask.address
 
         holder.locationButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("geo:${currentTask.point.latitude},${currentTask.point.longitude}")
+            val gmmIntentUri = Uri.parse("geo:${currentTask.latitude},${currentTask.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
@@ -50,7 +51,7 @@ class CompletedTaskListAdapter(private val context: Context, private val demoLis
     override fun getItemCount() = demoList.size
 
     @SuppressLint("InflateParams")
-    private fun showBottomSheet(demo: Demo) {
+    private fun showBottomSheet(demo: Point) {
         val bottomSheetDialog = BottomSheetDialog(context)
         val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_completed_bottom_sheet, null)
 
@@ -62,10 +63,10 @@ class CompletedTaskListAdapter(private val context: Context, private val demoLis
 
         fullNameTextView.text = demo.client.name
         phoneTextView.text = demo.client.phone
-        addressTextView.text = demo.point.address
+        addressTextView.text = demo.address
 
         locationButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("geo:${demo.point.latitude},${demo.point.longitude}")
+            val gmmIntentUri = Uri.parse("geo:${demo.latitude},${demo.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)

@@ -32,7 +32,7 @@ interface ApiService {
         @Body location: LocationData
     ): Response<Void>
 
-    @GET("tasks")
+    @GET("demos")
     fun getDemos(
         @Header("Authorization") token: String,
     ): Call<DemosListResponse>

@@ -15,7 +15,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.waterfilter.fragments.DealerHistoryFragment
-import com.example.waterfilter.fragments.DilerDemosListFragment
+import com.example.waterfilter.fragments.DealerDemosListFragment
 import com.example.waterfilter.services.LocationService
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.LoginActivity
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         // Load the default fragment
         if (savedInstanceState == null) {
-            loadFragment(DilerDemosListFragment())
+            loadFragment(DealerDemosListFragment())
         }
 
         checkPermissions()
@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    loadFragment(DilerDemosListFragment())
+                    loadFragment(DealerDemosListFragment())
                     true
                 }
                 R.id.navigation_history -> {

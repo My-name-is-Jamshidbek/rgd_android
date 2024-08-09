@@ -94,6 +94,18 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/phoneNumberDefault" />
+
+        <TextView
+            android:id="@+id/descTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/Address"
+            android:textSize="@dimen/popup_text_size_default"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/addressDefault" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -108,7 +120,7 @@
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
 
         <Button
-            android:id="@+id/locationButton"
+            android:id="@+id/cancel_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -123,7 +135,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <Button
-            android:id="@+id/service"
+            android:id="@+id/addClient"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -139,7 +151,7 @@
 
 
         <ImageButton
-            android:id="@+id/callButton"
+            android:id="@+id/serviceButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -152,8 +164,8 @@
             android:contentDescription="@string/call"
             android:src="@drawable/ic_call"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/service"
-            app:layout_constraintStart_toEndOf="@+id/locationButton"
+            app:layout_constraintEnd_toStartOf="@+id/addClient"
+            app:layout_constraintStart_toEndOf="@+id/cancel_button"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

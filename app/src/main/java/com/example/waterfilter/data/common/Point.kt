@@ -21,5 +21,6 @@ data class Point(
     @SerializedName("dealer_id") val dealerId: String?,
     @SerializedName("demo_time") val demoTime: String?,
     @SerializedName("created_at") val createdAt: String,
-    @SerializedName("updated_at") val updatedAt: String
+    @SerializedName("updated_at") val updatedAt: String,
+    @SerializedName("client") val client: Client
 )

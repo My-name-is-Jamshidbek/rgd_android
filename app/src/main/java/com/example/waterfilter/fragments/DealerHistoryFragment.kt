@@ -105,10 +105,10 @@ class DealerHistoryFragment : Fragment() {
             override fun onResponse(call: Call<DemosListResponse>, response: Response<DemosListResponse>) {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
-                    response.body()?.tasks?.let { tasks ->
-                        if (tasks.isNotEmpty()) {
-                            Toast.makeText(context, "Tugallangan ishlar soni ${tasks.count()}", Toast.LENGTH_SHORT).show()
-                            val taskListAdapter = CompletedTaskListAdapter(requireContext(), tasks)
+                    response.body()?.demos?.let { demos ->
+                        if (demos.isNotEmpty()) {
+                            Toast.makeText(context, "Tugallangan ishlar soni ${demos.count()}", Toast.LENGTH_SHORT).show()
+                            val taskListAdapter = CompletedTaskListAdapter(requireContext(), demos)
                             recyclerView.adapter = taskListAdapter
                         } else {
                             Toast.makeText(context, "Tugallangan ishlar mavjud emas", Toast.LENGTH_SHORT).show()
