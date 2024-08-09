@@ -12,5 +12,5 @@ data class AgentProduct(
     @SerializedName("created_at") val createdAt: Date,
     @SerializedName("updated_at") val updatedAt: Date,
     @SerializedName("product") var product: Product,
-    var isSelected: Boolean = false // This should not have SerializedName annotation
+    var isSelected: Boolean = true   // This should not have SerializedName annotation
 )

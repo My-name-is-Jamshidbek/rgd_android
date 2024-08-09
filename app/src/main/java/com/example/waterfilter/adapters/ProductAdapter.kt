@@ -47,7 +47,7 @@ class ProductAdapter(
         holder.checkBox.setOnCheckedChangeListener { _, isChecked ->
             val adapterPosition = holder.adapterPosition
             if (adapterPosition != RecyclerView.NO_POSITION) {
-                taskProducts[adapterPosition].isSelected = isChecked
+                taskProducts[adapterPosition].isSelected = !isChecked
             }
         }
 
