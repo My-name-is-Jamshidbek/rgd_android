@@ -29,13 +29,13 @@
         </activity>
         <activity android:name=".activities.menu.AgentHistoryActivity" />
         <activity android:name=".activities.menu.AgentProductsActivity" />
-        <activity android:name=".activities.menu.AgentTaskListActivity" />
+        <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.menu.SettingsActivity" />
         <activity android:name=".activities.pages.TaskActivity" />
         <activity android:name=".activities.pages.SmsVerificationActivity" />
 
         <service
-            android:name=".LocationService"
+            android:name=".services.LocationService"
             android:foregroundServiceType="location"
             android:permission="android.permission.FOREGROUND_SERVICE" />
 

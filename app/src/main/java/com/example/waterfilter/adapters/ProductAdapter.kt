@@ -15,7 +15,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.TaskActivity
-import com.example.waterfilter.data.AgentProduct
+import com.example.waterfilter.data.common.AgentProduct
 
 class ProductAdapter(
     private val context: Context,
@@ -31,7 +31,7 @@ class ProductAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
-        val view = LayoutInflater.from(context).inflate(R.layout.product_item, parent, false)
+        val view = LayoutInflater.from(context).inflate(R.layout.item_product, parent, false)
         return ProductViewHolder(view)
     }
 

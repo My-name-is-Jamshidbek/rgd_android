@@ -1,9 +1,15 @@
 package com.example.waterfilter.api
 
-import com.example.locationapp.LocationData
-import com.example.waterfilter.api.Login.LoginRequest
-import com.example.waterfilter.api.Login.LoginResponse
+import com.example.waterfilter.data.setLocation.LocationData
+import com.example.waterfilter.data.Login.LoginRequest
+import com.example.waterfilter.data.Login.LoginResponse
 import com.example.waterfilter.data.*
+import com.example.waterfilter.data.common.JsonResponse
+import com.example.waterfilter.data.getTaskById.TaskResponse
+import com.example.waterfilter.data.getTasks.TaskListResponse
+import com.example.waterfilter.data.pointLocation.SetPointLocationRequest
+import com.example.waterfilter.data.setTaskProducts.ProductRequest
+import com.example.waterfilter.data.updateProfile.User
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.*

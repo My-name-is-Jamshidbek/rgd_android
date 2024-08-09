@@ -6,6 +6,7 @@ import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,11 +23,11 @@ import com.example.waterfilter.R
 import com.example.waterfilter.adapters.ProductAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.data.AgentProduct
-import com.example.waterfilter.data.SetPointLocationRequest
-import com.example.waterfilter.data.ProductRequest
-import com.example.waterfilter.data.TaskProduct
-import com.example.waterfilter.data.TaskResponse
+import com.example.waterfilter.data.common.AgentProduct
+import com.example.waterfilter.data.pointLocation.SetPointLocationRequest
+import com.example.waterfilter.data.setTaskProducts.ProductRequest
+import com.example.waterfilter.data.common.TaskProduct
+import com.example.waterfilter.data.getTaskById.TaskResponse
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -54,7 +55,6 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var clientPhoneTextView: TextView
     private lateinit var clientDescTextView: TextView
 
-    private lateinit var pointLocationTextView: Button
     private lateinit var pointModelTextView: TextView
     private lateinit var pointExpireDateTextView: TextView
     private lateinit var pointExpireTextView: TextView
@@ -67,7 +67,6 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var agentProduct: AgentProduct
     private var agentProducts: List<AgentProduct> = emptyList() // Initialize with an empty list
 
-    private lateinit var bottomNavigationView: BottomNavigationView
 
     companion object {
         private const val LOCATION_PERMISSION_REQUEST_CODE = 1
@@ -76,7 +75,7 @@ class TaskActivity : AppCompatActivity() {
     @SuppressLint("NotifyDataSetChanged", "CutPasteId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_task)
+        setContentView(R.layout.activity_page_task)
 
         // Get task ID from intent
         taskId = intent.getStringExtra("TASK_ID") ?: ""
@@ -97,11 +96,11 @@ class TaskActivity : AppCompatActivity() {
         clientPhoneTextView = findViewById(R.id.clientPhoneTextView)
         clientDescTextView = findViewById(R.id.clientDescTextView)
 
-        pointLocationTextView = findViewById(R.id.pointLocationTextView)
         pointModelTextView = findViewById(R.id.pointModelTextView)
         pointExpireDateTextView = findViewById(R.id.pointExpireDateTextView)
         pointExpireTextView = findViewById(R.id.pointExpireTextView)
         pointInstallationDateTextView = findViewById(R.id.pointInstallationDateTextView)
+
 
         // Initialize RecyclerView for products
         productRecyclerView = findViewById(R.id.productRecyclerView)
@@ -199,6 +198,7 @@ class TaskActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun bindData(taskResponse: TaskResponse) {
         val task = taskResponse.task
         val client = task.client
@@ -215,10 +215,9 @@ class TaskActivity : AppCompatActivity() {
         clientPhoneTextView.text = client.phone
         clientDescTextView.text = client.description
 
-        pointLocationTextView.text = getString(R.string.poin_location_btn)
         pointModelTextView.text = point.filterId.toString()
-        pointExpireDateTextView.text = point.filterExpireDate
-        pointExpireTextView.text = point.filterExpire.toString()
+        pointExpireDateTextView.text = point.filterExpireDate.substring(0, 10)
+        pointExpireTextView.text = "${point.filterExpire.toString()} oy"
         pointInstallationDateTextView.text = point.installationDate
 
         // Set up ProductAdapter after fetching the task details

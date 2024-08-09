@@ -11,10 +11,10 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.waterfilter.R
-import com.example.waterfilter.activities.menu.AgentTaskListActivity
+import com.example.waterfilter.activities.MainActivity
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.api.JsonResponse
+import com.example.waterfilter.data.common.JsonResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,7 +33,7 @@ class SmsVerificationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sms_verification)
+        setContentView(R.layout.activity_page_sms_verification)
 
         taskId = intent.getStringExtra("TASK_ID") ?: ""
         phoneNumber = intent.getStringExtra("PHONE") ?: ""
@@ -120,7 +120,7 @@ class SmsVerificationActivity : AppCompatActivity() {
             override fun onResponse(call: Call<JsonResponse>, response: Response<JsonResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
                     Toast.makeText(this@SmsVerificationActivity, "Verification successful", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this@SmsVerificationActivity, AgentTaskListActivity::class.java)
+                    val intent = Intent(this@SmsVerificationActivity, MainActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(this@SmsVerificationActivity, "Verification failed", Toast.LENGTH_SHORT).show()

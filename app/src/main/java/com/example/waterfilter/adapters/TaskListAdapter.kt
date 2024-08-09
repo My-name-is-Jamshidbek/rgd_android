@@ -13,7 +13,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.TaskActivity
-import com.example.waterfilter.data.Task
+import com.example.waterfilter.data.common.Task
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class TaskListAdapter(private val context: Context, private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
@@ -26,7 +26,7 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.task_item, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
         return TaskViewHolder(itemView)
     }
 
@@ -53,7 +53,7 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
     @SuppressLint("InflateParams")
     private fun showBottomSheet(task: Task) {
         val bottomSheetDialog = BottomSheetDialog(context)
-        val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.user_item_bottom_sheet, null)
+        val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_user_bottom_sheet, null)
 
         val fullNameTextView = bottomSheetView.findViewById<TextView>(R.id.fullNameTextView)
         val phoneTextView = bottomSheetView.findViewById<TextView>(R.id.phoneTextView)

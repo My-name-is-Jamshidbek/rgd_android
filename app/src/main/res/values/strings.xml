@@ -19,7 +19,7 @@
     <string name="title_products">Mahsulotlar</string>
     <string name="title_settings">Sozlanmalar</string>
 
-<!--                          TASK-->
+    <!--                          TASK-->
 
     <string name="filter_data">FILTR MA`LUMOTLARI</string>
     <string name="filter_name">Model</string>
@@ -50,4 +50,9 @@
     <string name="example_phone">914285153</string>
     <string name="resend_sms_btn_text">Qayta yuborish</string>
     <string name="continue_btn_text">Davom etish</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="productsDesc">Sizda mavjud mahsulotlar ro`yxati</string>
+    <string name="historyDesc">Tugatgan ishlaringiz ro`yxati</string>
+    <string name="select_day_text">Kunni tanlash</string>
 </resources>

@@ -4,17 +4,17 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.example.waterfilter.activities.menu.AgentTaskListActivity
+import com.example.waterfilter.activities.MainActivity
 import com.example.waterfilter.api.ApiClient
-import com.example.waterfilter.api.Login.LoginRequest
-import com.example.waterfilter.api.Login.LoginResponse
-import com.example.waterfilter.databinding.ActivityLoginBinding
+import com.example.waterfilter.data.Login.LoginRequest
+import com.example.waterfilter.data.Login.LoginResponse
+import com.example.waterfilter.databinding.ActivityPageLoginBinding
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityLoginBinding
+    private lateinit var binding: ActivityPageLoginBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,13 +22,13 @@ class LoginActivity : AppCompatActivity() {
         val isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false)
 
         if (isLoggedIn) {
-            // User is already logged in, navigate to AgentTaskListActivity
-            val intent = Intent(this, AgentTaskListActivity::class.java)
+            // User is already logged in, navigate to MainActivity
+            val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()  // Close the current activity
         } else {
             // User is not logged in, show the login screen
-            binding = ActivityLoginBinding.inflate(layoutInflater)
+            binding = ActivityPageLoginBinding.inflate(layoutInflater)
 
             binding.loginButton.setOnClickListener {
                 val phone = binding.phone.text.toString()
@@ -59,7 +59,7 @@ class LoginActivity : AppCompatActivity() {
                         editor.apply()
 
                         Toast.makeText(this@LoginActivity, "Kirildi", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@LoginActivity, AgentTaskListActivity::class.java)
+                        val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()  // Optional: Close the login activity
                     }
