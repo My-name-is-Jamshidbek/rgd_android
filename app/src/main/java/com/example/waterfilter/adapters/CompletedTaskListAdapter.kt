@@ -53,7 +53,7 @@ class CompletedTaskListAdapter(private val context: Context, private val taskLis
     @SuppressLint("InflateParams")
     private fun showBottomSheet(task: Task) {
         val bottomSheetDialog = BottomSheetDialog(context)
-        val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_user_bottom_sheet, null)
+        val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_completed_bottom_sheet, null)
 
         val fullNameTextView = bottomSheetView.findViewById<TextView>(R.id.fullNameTextView)
         val phoneTextView = bottomSheetView.findViewById<TextView>(R.id.phoneTextView)

@@ -5,6 +5,7 @@ import com.example.waterfilter.data.Login.LoginRequest
 import com.example.waterfilter.data.Login.LoginResponse
 import com.example.waterfilter.data.*
 import com.example.waterfilter.data.common.JsonResponse
+import com.example.waterfilter.data.completedTasks.CompletedTasksRequest
 import com.example.waterfilter.data.getTaskById.TaskResponse
 import com.example.waterfilter.data.getTasks.TaskListResponse
 import com.example.waterfilter.data.pointLocation.SetPointLocationRequest
@@ -58,10 +59,10 @@ interface ApiService {
         @Body request: Map<String, Int>
     ): Call<JsonResponse>
 
+    @Headers("Content-Type: application/json")
     @POST("tasks/completed")
-    fun completedTasks(
+    fun getCompletedTasks(
         @Header("Authorization") token: String,
-        @Body request: Map<String, String>
+        @Body request: CompletedTasksRequest
     ): Call<TaskListResponse>
-
 }
