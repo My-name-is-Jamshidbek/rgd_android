@@ -59,7 +59,6 @@ class CompletedTaskListAdapter(private val context: Context, private val taskLis
         val phoneTextView = bottomSheetView.findViewById<TextView>(R.id.phoneTextView)
         val addressTextView = bottomSheetView.findViewById<TextView>(R.id.addressTextView)
         val locationButton = bottomSheetView.findViewById<Button>(R.id.locationButton)
-        val serviceButton = bottomSheetView.findViewById<Button>(R.id.service)
         val callButton = bottomSheetView.findViewById<ImageButton>(R.id.callButton)
 
         fullNameTextView.text = task.client.name
@@ -77,13 +76,6 @@ class CompletedTaskListAdapter(private val context: Context, private val taskLis
             val callIntent = Intent(Intent.ACTION_DIAL)
             callIntent.data = Uri.parse("tel:${task.client.phone}")
             context.startActivity(callIntent)
-        }
-
-        // Updated serviceButton click listener
-        serviceButton.setOnClickListener {
-            val intent = Intent(context, TaskActivity::class.java)
-            intent.putExtra("TASK_ID", task.id.toString())
-            context.startActivity(intent)
         }
         bottomSheetDialog.setContentView(bottomSheetView)
         bottomSheetDialog.show()

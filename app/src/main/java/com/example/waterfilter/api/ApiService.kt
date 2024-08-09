@@ -6,6 +6,7 @@ import com.example.waterfilter.data.Login.LoginResponse
 import com.example.waterfilter.data.*
 import com.example.waterfilter.data.common.JsonResponse
 import com.example.waterfilter.data.completedTasks.CompletedTasksRequest
+import com.example.waterfilter.data.getProducts.AgentProductsListResponse
 import com.example.waterfilter.data.getTaskById.TaskResponse
 import com.example.waterfilter.data.getTasks.TaskListResponse
 import com.example.waterfilter.data.pointLocation.SetPointLocationRequest
@@ -65,4 +66,9 @@ interface ApiService {
         @Header("Authorization") token: String,
         @Body request: CompletedTasksRequest
     ): Call<TaskListResponse>
+
+    @GET("products")
+    fun getAgentProducts(
+        @Header("Authorization") token: String,
+    ): Call<AgentProductsListResponse>
 }
