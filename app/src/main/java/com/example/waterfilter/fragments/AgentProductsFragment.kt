@@ -56,19 +56,21 @@ class AgentProductsFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.products?.let { products ->
-                        Toast.makeText(context, "Agent products count: ${products.count()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Agent mahsulotlari soni: ${products.count()}", Toast.LENGTH_SHORT).show()
                         val agentProductsListAdapter = AgentProductsListAdapter(requireContext(), products)
                         recyclerView.adapter = agentProductsListAdapter
                     } ?: run {
-                        Toast.makeText(context, "No products available", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Mahsulotlar mavjud emas", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<AgentProductsListResponse>, t: Throwable) {
                 swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(context, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

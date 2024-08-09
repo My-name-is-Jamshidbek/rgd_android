@@ -100,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 (grantResults.size > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
                 startLocationService()
             } else {
-                Toast.makeText(this, "Location permissions are required for this app", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
         editor.apply()
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
-        Toast.makeText(this, "Logged out", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Hisobdan chiqildi", Toast.LENGTH_SHORT).show()
     }
 
     override fun onDestroy() {

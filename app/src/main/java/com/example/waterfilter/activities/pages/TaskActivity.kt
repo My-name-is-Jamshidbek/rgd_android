@@ -111,7 +111,7 @@ class TaskActivity : AppCompatActivity() {
         addProductButton = findViewById(R.id.addProduct)
         addProductButton.setOnClickListener {
             // Create a new product item
-            Toast.makeText(this@TaskActivity, "Product added", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@TaskActivity, "Product added", Toast.LENGTH_SHORT).show()
             addProduct()
         }
 
@@ -152,19 +152,20 @@ class TaskActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
                         Log.d(ContentValues.TAG, "Task products sent successfully")
-                        Toast.makeText(this@TaskActivity, "Task products sent successfully", Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(this@TaskActivity, "Task products sent successfully", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@TaskActivity, SmsVerificationActivity::class.java)
                         intent.putExtra("TASK_ID", taskId)
                         intent.putExtra("PHONE", clientPhoneTextView.text)
                         startActivity(intent)
                     } else {
                         Log.e(ContentValues.TAG, "Failed to send task products: ${response.code()}")
-                        Toast.makeText(this@TaskActivity, "Failed to send task products", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TaskActivity, "Xatolik yuz berdi!", Toast.LENGTH_SHORT).show()
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     Log.e(ContentValues.TAG, "Error sending task products", e)
+                    Toast.makeText(this@TaskActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(this@TaskActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -249,7 +250,7 @@ class TaskActivity : AppCompatActivity() {
                     apiService.setPointLocation("Bearer $token", request).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                Toast.makeText(this@TaskActivity, "Location sent", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@TaskActivity, "Lokatsiya ulashildi", Toast.LENGTH_SHORT).show()
                                 locationSetLayout.visibility = View.GONE
                             } else {
                                 Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
@@ -271,7 +272,7 @@ class TaskActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 sendCurrentLocation()
             } else {
-                Toast.makeText(this@TaskActivity, "Location permission denied", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TaskActivity, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
             }
         }
     }

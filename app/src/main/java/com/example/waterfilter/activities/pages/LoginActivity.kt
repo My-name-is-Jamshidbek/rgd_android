@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity() {
                         editor.putString("token", loginResponse.data.token)
                         editor.apply()
 
-                        Toast.makeText(this@LoginActivity, "Kirildi", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, "Hisobga kirildi", Toast.LENGTH_SHORT).show()
                         val intent = Intent(this@LoginActivity, MainActivity::class.java)
                         startActivity(intent)
                         finish()  // Optional: Close the login activity
@@ -67,11 +67,12 @@ class LoginActivity : AppCompatActivity() {
                     // Log the raw response for debugging
                     val errorBody = response.errorBody()?.string()
                     println("Error: $errorBody")
-                    Toast.makeText(this@LoginActivity, "Kirishni iloji bo`lmadi: $errorBody", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, "Hisobga kirishni iloji bo`lmadi: $errorBody", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
+                Toast.makeText(this@LoginActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(this@LoginActivity, "Login Failed: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

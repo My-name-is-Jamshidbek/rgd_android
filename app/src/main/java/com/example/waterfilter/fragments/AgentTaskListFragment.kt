@@ -55,19 +55,21 @@ class AgentTaskListFragment : Fragment() {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.tasks?.let { tasks ->
-                        Toast.makeText(context, "Tasks count ${tasks.count()}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Vazifalar soni: ${tasks.count()}", Toast.LENGTH_SHORT).show()
                         val taskListAdapter = TaskListAdapter(requireContext(), tasks)
                         recyclerView.adapter = taskListAdapter
                     } ?: run {
-                        Toast.makeText(context, "No tasks available", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Vazifalar topilmadi", Toast.LENGTH_SHORT).show()
                     }
                 } else {
+                    Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
                 swipeRefreshLayout.isRefreshing = false
+                Toast.makeText(context, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(context, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })

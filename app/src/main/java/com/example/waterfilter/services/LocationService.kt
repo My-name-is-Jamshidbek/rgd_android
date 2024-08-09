@@ -141,9 +141,15 @@ class LocationService : Service() {
 //                    }
                 } else {
                     Log.e(TAG, "sendLocationToServer: Failed to send location: ${response.code()} - ${response.message()}")
-//                    GlobalScope.launch(Dispatchers.Main) {
-//                        Toast.makeText(this@LocationService, "Failed to send location", Toast.LENGTH_SHORT).show()
-//                    }
+                    if (response.code() == 401){
+                        GlobalScope.launch(Dispatchers.Main) {
+                            Toast.makeText(this@LocationService, "Hisobga kirilmagan!", Toast.LENGTH_SHORT).show()
+                        }
+                        val editor = sharedPreferences.edit()
+                        editor.clear()
+                        editor.apply()
+                        stopSelf()
+                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "sendLocationToServer: Error sending location", e)

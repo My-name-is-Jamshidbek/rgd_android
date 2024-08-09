@@ -63,7 +63,7 @@ class SmsVerificationActivity : AppCompatActivity() {
             if (smsCode.length == 6) {
                 verifySmsCode(taskId, smsCode)
             } else {
-                Toast.makeText(this, "Please enter a valid 6-digit code", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Iltimos mijoz telefoniga borgan 6 xonali kodni kiriting", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -119,15 +119,16 @@ class SmsVerificationActivity : AppCompatActivity() {
         apiService.verifySmsCode("Bearer $token", taskId, request).enqueue(object : Callback<JsonResponse> {
             override fun onResponse(call: Call<JsonResponse>, response: Response<JsonResponse>) {
                 if (response.isSuccessful && response.body()?.success == true) {
-                    Toast.makeText(this@SmsVerificationActivity, "Verification successful", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SmsVerificationActivity, "Tasdiqlash muvaffaqiyatli", Toast.LENGTH_SHORT).show()
                     val intent = Intent(this@SmsVerificationActivity, MainActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this@SmsVerificationActivity, "Verification failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@SmsVerificationActivity, "Tasdiqlash muvaffaqiyatsiz", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<JsonResponse>, t: Throwable) {
+                Toast.makeText(this@SmsVerificationActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(this@SmsVerificationActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
             }
         })
@@ -135,6 +136,6 @@ class SmsVerificationActivity : AppCompatActivity() {
 
     private fun resendSmsCode() {
         // Implement the logic to resend the SMS code
-        Toast.makeText(this, "SMS resent", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "SMS qayta jo`natildi", Toast.LENGTH_SHORT).show()
     }
 }

@@ -60,7 +60,7 @@ class SettingsFragment : Fragment() {
             val newPassword = userNewPasswordText.text.toString()
             val newPasswordConfirm = userNewPasswordConfirmText.text.toString()
             if (newPassword != newPasswordConfirm) {
-                Toast.makeText(requireContext(), "New password != New password confirmation.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Iltimos parolni to`g`ri kiriting!", Toast.LENGTH_SHORT).show()
             } else {
                 val user = User(newUserName, newUserPhone, oldPassword, newPassword, newPasswordConfirm)
                 updateUserData(user, userOldPasswordEditText, userNewPasswordText, userNewPasswordConfirmText)
@@ -85,7 +85,7 @@ class SettingsFragment : Fragment() {
                         editor.putString("userPhone", user.phone)
                         editor.apply()
 
-                        Toast.makeText(requireContext(), "User updated successfully", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Foydalanuvchi muvaffaqiyatli yangilandi", Toast.LENGTH_SHORT).show()
                         // Clear password fields
                         userOldPasswordEditText.text.clear()
                         userNewPasswordText.text.clear()
@@ -93,16 +93,17 @@ class SettingsFragment : Fragment() {
                     } else {
                         when (response.code()) {
                             401 -> {
-                                Toast.makeText(requireContext(), "You are not logged in. Please log in again.", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
                                 val intent = Intent(requireContext(), LoginActivity::class.java)
                                 startActivity(intent)
                                 requireActivity().finish()
                             }
                             404 -> {
-                                Toast.makeText(requireContext(), "Update failed: Resource not found", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(requireContext(), "Yangilash amalga oshmadi: Resurs topilmadi", Toast.LENGTH_SHORT).show()
                             }
                             else -> {
                                 val errorMessage = response.errorBody()?.string()
+                                Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                                 Toast.makeText(requireContext(), "Failed to update user: $errorMessage", Toast.LENGTH_SHORT).show()
                             }
                         }
