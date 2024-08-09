@@ -11,17 +11,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.adapters.TaskListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
-import com.example.waterfilter.data.getTasks.TaskListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.waterfilter.activities.pages.LoginActivity
+import com.example.waterfilter.adapters.DemoListAdapter
+import com.example.waterfilter.data.getDemos.DemosListResponse
 
-class AgentTaskListFragment : Fragment() {
+class DealerDemosListFragment : Fragment() {
 
     private lateinit var apiService: ApiService
     private lateinit var recyclerView: RecyclerView
@@ -31,7 +31,7 @@ class AgentTaskListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_agent_task_list, container, false)
+        val view = inflater.inflate(R.layout.fragment_dealer_demos_list, container, false)
 
         swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout)
         recyclerView = view.findViewById(R.id.recyclerView)
@@ -39,32 +39,32 @@ class AgentTaskListFragment : Fragment() {
 
         apiService = ApiClient.getApiService(requireContext())
 
-        fetchTasks()
+        fetchDemos()
 
         swipeRefreshLayout.setOnRefreshListener {
-            fetchTasks()
+            fetchDemos()
         }
 
         return view
     }
 
-    private fun fetchTasks() {
+    private fun fetchDemos() {
         val sharedPreferences = requireActivity().getSharedPreferences("LoginPrefs", AppCompatActivity.MODE_PRIVATE)
         val token = sharedPreferences.getString("token", "") ?: return
 
-        apiService.getTasks("Bearer $token").enqueue(object : Callback<TaskListResponse> {
-            override fun onResponse(call: Call<TaskListResponse>, response: Response<TaskListResponse>) {
+        apiService.getDemos("Bearer $token").enqueue(object : Callback<DemosListResponse> {
+            override fun onResponse(call: Call<DemosListResponse>, response: Response<DemosListResponse>) {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
-                    response.body()?.tasks?.let { tasks ->
-                        if (tasks.isNotEmpty()) {
+                    response.body()?.demos?.let { demos ->
+                        if (demos.isNotEmpty()) {
                             Toast.makeText(
                                 context,
-                                "Vazifalar soni: ${tasks.count()}",
+                                "Vazifalar soni: ${demos.count()}",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            val taskListAdapter = TaskListAdapter(requireContext(), tasks)
-                            recyclerView.adapter = taskListAdapter
+                            val demoListAdapter = DemoListAdapter(requireContext(), demos)
+                            recyclerView.adapter = demoListAdapter
                         } else if (response.code() == 401) {
                             // Handle unauthorized access (401)
                             Toast.makeText(requireContext(), "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
@@ -94,7 +94,7 @@ class AgentTaskListFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DemosListResponse>, t: Throwable) {
                 swipeRefreshLayout.isRefreshing = false
                 Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(context, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()

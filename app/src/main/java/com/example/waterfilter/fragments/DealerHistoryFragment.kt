@@ -19,7 +19,7 @@ import com.example.waterfilter.adapters.CompletedTaskListAdapter
 import com.example.waterfilter.api.ApiClient
 import com.example.waterfilter.api.ApiService
 import com.example.waterfilter.data.completedTasks.CompletedTasksRequest
-import com.example.waterfilter.data.getTasks.TaskListResponse
+import com.example.waterfilter.data.getDemos.DemosListResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -28,7 +28,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class AgentHistoryFragment : Fragment() {
+class DealerHistoryFragment : Fragment() {
 
     private lateinit var apiService: ApiService
     private lateinit var recyclerView: RecyclerView
@@ -101,8 +101,8 @@ class AgentHistoryFragment : Fragment() {
         val token = sharedPreferences.getString("token", "") ?: return
         val request = CompletedTasksRequest(completed_time = dateFormat.format(selectedDate).toString())
 
-        apiService.getCompletedTasks("Bearer $token", request).enqueue(object : Callback<TaskListResponse> {
-            override fun onResponse(call: Call<TaskListResponse>, response: Response<TaskListResponse>) {
+        apiService.getCompletedTasks("Bearer $token", request).enqueue(object : Callback<DemosListResponse> {
+            override fun onResponse(call: Call<DemosListResponse>, response: Response<DemosListResponse>) {
                 swipeRefreshLayout.isRefreshing = false
                 if (response.isSuccessful) {
                     response.body()?.tasks?.let { tasks ->
@@ -134,7 +134,7 @@ class AgentHistoryFragment : Fragment() {
                 }
             }
 
-            override fun onFailure(call: Call<TaskListResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DemosListResponse>, t: Throwable) {
                 swipeRefreshLayout.isRefreshing = false
                 Toast.makeText(context, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
                 Toast.makeText(context, "Failure: ${t.message}", Toast.LENGTH_SHORT).show()

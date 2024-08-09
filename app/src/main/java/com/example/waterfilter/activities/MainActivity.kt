@@ -14,11 +14,11 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.waterfilter.fragments.DealerHistoryFragment
+import com.example.waterfilter.fragments.DilerDemosListFragment
 import com.example.waterfilter.services.LocationService
 import com.example.waterfilter.R
 import com.example.waterfilter.activities.pages.LoginActivity
-import com.example.waterfilter.fragments.AgentTaskListFragment
-import com.example.waterfilter.fragments.AgentHistoryFragment
 import com.example.waterfilter.fragments.AgentProductsFragment
 import com.example.waterfilter.fragments.SettingsFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
 
         // Load the default fragment
         if (savedInstanceState == null) {
-            loadFragment(AgentTaskListFragment())
+            loadFragment(DilerDemosListFragment())
         }
 
         checkPermissions()
@@ -54,11 +54,11 @@ class MainActivity : AppCompatActivity() {
         bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.navigation_home -> {
-                    loadFragment(AgentTaskListFragment())
+                    loadFragment(DilerDemosListFragment())
                     true
                 }
                 R.id.navigation_history -> {
-                    loadFragment(AgentHistoryFragment())
+                    loadFragment(DealerHistoryFragment())
                     true
                 }
                 R.id.navigation_products -> {

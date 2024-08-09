@@ -14,7 +14,7 @@ import android.widget.Spinner
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.activities.pages.TaskActivity
+import com.example.waterfilter.activities.pages.DemoActivity
 import com.example.waterfilter.data.common.AgentProduct
 
 class ProductAdapter(
@@ -115,8 +115,8 @@ class ProductAdapter(
         } else {
             notifyItemInserted(taskProducts.size - 1)
 //            notifyItemRangeChanged(taskProducts.size - 1, 1)
-//            (context as TaskActivity).findViewById<NestedScrollView>(R.id.scrollView).requestLayout()
-            (context as TaskActivity).findViewById<RecyclerView>(R.id.productRecyclerView).smoothScrollToPosition(taskProducts.size - 1)
+//            (context as DemoActivity).findViewById<NestedScrollView>(R.id.scrollView).requestLayout()
+            (context as DemoActivity).findViewById<RecyclerView>(R.id.productRecyclerView).smoothScrollToPosition(taskProducts.size - 1)
         }
 
         Log.d("ProductAdapter", "notifyItemInserted called for position: ${taskProducts.size - 1}")

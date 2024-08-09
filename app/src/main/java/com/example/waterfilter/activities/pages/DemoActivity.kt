@@ -39,7 +39,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TaskActivity : AppCompatActivity() {
+class DemoActivity : AppCompatActivity() {
 
     private lateinit var apiService: ApiService
     private lateinit var taskId: String
@@ -77,7 +77,7 @@ class TaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_page_task)
 
-        // Get task ID from intent
+        // Get demo ID from intent
         taskId = intent.getStringExtra("TASK_ID") ?: ""
 
         // Initialize API service
@@ -112,7 +112,7 @@ class TaskActivity : AppCompatActivity() {
         addProductButton = findViewById(R.id.addProduct)
         addProductButton.setOnClickListener {
             // Create a new product item
-//            Toast.makeText(this@TaskActivity, "Product added", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this@DemoActivity, "Product added", Toast.LENGTH_SHORT).show()
             addProduct()
         }
 
@@ -130,7 +130,7 @@ class TaskActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             fetchTaskDetails(taskId)
         }
-        // Fetch task details
+        // Fetch demo details
         fetchTaskDetails(taskId)
     }
 
@@ -154,15 +154,15 @@ class TaskActivity : AppCompatActivity() {
                 val response = apiService.setTaskProducts("Bearer $token", taskId, productRequest).execute()
                 withContext(Dispatchers.Main) {
                     if (response.isSuccessful) {
-                        Log.d(ContentValues.TAG, "Task products sent successfully")
-//                        Toast.makeText(this@TaskActivity, "Task products sent successfully", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this@TaskActivity, SmsVerificationActivity::class.java)
+                        Log.d(ContentValues.TAG, "Demo products sent successfully")
+//                        Toast.makeText(this@DemoActivity, "Demo products sent successfully", Toast.LENGTH_SHORT).show()
+                        val intent = Intent(this@DemoActivity, SmsVerificationActivity::class.java)
                         intent.putExtra("TASK_ID", taskId)
                         intent.putExtra("PHONE", clientPhoneTextView.text)
                         startActivity(intent)
                     } else if (response.code() == 401) {
                         // Handle unauthorized access (401)
-                        Toast.makeText(this@TaskActivity, "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@DemoActivity, "Siz tizimga kirmagansiz. Iltimos, qayta kiring.", Toast.LENGTH_SHORT).show()
 
                         // Clear shared preferences or any stored user session data
                         val editor = sharedPreferences.edit()
@@ -170,19 +170,19 @@ class TaskActivity : AppCompatActivity() {
                         editor.apply()
 
                         // Redirect the user to the login activity
-                        val intent = Intent(this@TaskActivity, LoginActivity::class.java)
+                        val intent = Intent(this@DemoActivity, LoginActivity::class.java)
                         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK // Clear the back stack
                         startActivity(intent)
                     } else {
-                        Toast.makeText(this@TaskActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
-                        Log.e(ContentValues.TAG, " to Failedsend task products: ${response.code()}")
+                        Toast.makeText(this@DemoActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
+                        Log.e(ContentValues.TAG, " to Failedsend demo products: ${response.code()}")
                     }
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Log.e(ContentValues.TAG, "Error sending task products", e)
-                    Toast.makeText(this@TaskActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(this@TaskActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                    Log.e(ContentValues.TAG, "Error sending demo products", e)
+                    Toast.makeText(this@DemoActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DemoActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -205,19 +205,19 @@ class TaskActivity : AppCompatActivity() {
                         bindData(it)
                     }
                 } else {
-                    Toast.makeText(this@TaskActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DemoActivity, "Qandaydir xatolik yuz berdi iltimos qayta urinib ko`ring!", Toast.LENGTH_SHORT).show()
                 }
             }
 
             override fun onFailure(call: Call<TaskResponse>, t: Throwable) {
-                Toast.makeText(this@TaskActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DemoActivity, "Iltimos internet aloqasini tekshiring!", Toast.LENGTH_SHORT).show()
             }
         })
     }
 
     @SuppressLint("SetTextI18n")
     private fun bindData(taskResponse: TaskResponse) {
-        val task = taskResponse.task
+        val task = taskResponse.demo
         val client = task.client
         val point = task.point
 
@@ -237,7 +237,7 @@ class TaskActivity : AppCompatActivity() {
         pointExpireTextView.text = "${point.filterExpire.toString()} oy"
         pointInstallationDateTextView.text = point.installationDate
 
-        // Set up ProductAdapter after fetching the task details
+        // Set up ProductAdapter after fetching the demo details
         productAdapter = ProductAdapter(this, taskProducts, agentProducts)
         productRecyclerView.adapter = productAdapter
     }
@@ -261,20 +261,20 @@ class TaskActivity : AppCompatActivity() {
                     val request = SetPointLocationRequest(
                         latitude = it.latitude,
                         longitude = it.longitude,
-                        point_id = taskId.toInt() // Assuming the task ID is the same as point ID
+                        point_id = taskId.toInt() // Assuming the demo ID is the same as point ID
                     )
                     apiService.setPointLocation("Bearer $token", request).enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>, response: Response<Void>) {
                             if (response.isSuccessful) {
-                                Toast.makeText(this@TaskActivity, "Lokatsiya ulashildi", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@DemoActivity, "Lokatsiya ulashildi", Toast.LENGTH_SHORT).show()
                                 locationSetLayout.visibility = View.GONE
                             } else {
-                                Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this@DemoActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
                             }
                         }
 
                         override fun onFailure(call: Call<Void>, t: Throwable) {
-                            Toast.makeText(this@TaskActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@DemoActivity, "Qandaydir muammo yuz berdi", Toast.LENGTH_SHORT).show()
                         }
                     })
                 }
@@ -288,7 +288,7 @@ class TaskActivity : AppCompatActivity() {
             if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                 sendCurrentLocation()
             } else {
-                Toast.makeText(this@TaskActivity, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DemoActivity, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
             }
         }
     }

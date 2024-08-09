@@ -12,46 +12,46 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.waterfilter.R
-import com.example.waterfilter.activities.pages.TaskActivity
-import com.example.waterfilter.data.common.Task
+import com.example.waterfilter.activities.pages.DemoActivity
+import com.example.waterfilter.data.common.Demo
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class TaskListAdapter(private val context: Context, private val taskList: List<Task>) : RecyclerView.Adapter<TaskListAdapter.TaskViewHolder>() {
+class DemoListAdapter(private val context: Context, private val demoList: List<Demo>) : RecyclerView.Adapter<DemoListAdapter.demoViewHolder>() {
 
-    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class demoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val fullNameTextView: TextView = itemView.findViewById(R.id.fullNameTextView)
         val phoneTextView: TextView = itemView.findViewById(R.id.phoneTextView)
         val addressTextView: TextView = itemView.findViewById(R.id.addressTextView)
         val locationButton: Button = itemView.findViewById(R.id.locationButton)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_task, parent, false)
-        return TaskViewHolder(itemView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): demoViewHolder {
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_demo, parent, false)
+        return demoViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: TaskViewHolder, position: Int) {
-        val currentTask = taskList[position]
-        holder.fullNameTextView.text = currentTask.client.name
-        holder.phoneTextView.text = currentTask.client.phone
-        holder.addressTextView.text = currentTask.point.address
+    override fun onBindViewHolder(holder: demoViewHolder, position: Int) {
+        val currentdemo = demoList[position]
+        holder.fullNameTextView.text = currentdemo.client.name
+        holder.phoneTextView.text = currentdemo.client.phone
+        holder.addressTextView.text = currentdemo.point.address
 
         holder.locationButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("geo:${currentTask.point.latitude},${currentTask.point.longitude}")
+            val gmmIntentUri = Uri.parse("geo:${currentdemo.point.latitude},${currentdemo.point.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
         }
 
         holder.itemView.setOnClickListener {
-            showBottomSheet(currentTask)
+            showBottomSheet(currentdemo)
         }
     }
 
-    override fun getItemCount() = taskList.size
+    override fun getItemCount() = demoList.size
 
     @SuppressLint("InflateParams")
-    private fun showBottomSheet(task: Task) {
+    private fun showBottomSheet(demo: Demo) {
         val bottomSheetDialog = BottomSheetDialog(context)
         val bottomSheetView = LayoutInflater.from(context).inflate(R.layout.item_user_bottom_sheet, null)
 
@@ -62,12 +62,12 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
         val serviceButton = bottomSheetView.findViewById<Button>(R.id.service)
         val callButton = bottomSheetView.findViewById<ImageButton>(R.id.callButton)
 
-        fullNameTextView.text = task.client.name
-        phoneTextView.text = task.client.phone
-        addressTextView.text = task.point.address
+        fullNameTextView.text = demo.client.name
+        phoneTextView.text = demo.client.phone
+        addressTextView.text = demo.point.address
 
         locationButton.setOnClickListener {
-            val gmmIntentUri = Uri.parse("geo:${task.point.latitude},${task.point.longitude}")
+            val gmmIntentUri = Uri.parse("geo:${demo.point.latitude},${demo.point.longitude}")
             val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
             mapIntent.setPackage("com.google.android.apps.maps")
             context.startActivity(mapIntent)
@@ -75,14 +75,14 @@ class TaskListAdapter(private val context: Context, private val taskList: List<T
 
         callButton.setOnClickListener {
             val callIntent = Intent(Intent.ACTION_DIAL)
-            callIntent.data = Uri.parse("tel:${task.client.phone}")
+            callIntent.data = Uri.parse("tel:${demo.client.phone}")
             context.startActivity(callIntent)
         }
 
         // Updated serviceButton click listener
         serviceButton.setOnClickListener {
-            val intent = Intent(context, TaskActivity::class.java)
-            intent.putExtra("TASK_ID", task.id.toString())
+            val intent = Intent(context, DemoActivity::class.java)
+            intent.putExtra("demo_ID", demo.id.toString())
             context.startActivity(intent)
         }
         bottomSheetDialog.setContentView(bottomSheetView)

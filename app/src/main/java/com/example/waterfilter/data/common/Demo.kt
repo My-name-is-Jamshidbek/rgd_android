@@ -1,7 +1,7 @@
 package com.example.waterfilter.data.common
 import com.google.gson.annotations.SerializedName
 
-data class Task(
+data class Demo(
     @SerializedName("id") val id: Int,
     @SerializedName("client_id") val clientId: Int,
     @SerializedName("point_id") val pointId: Int,

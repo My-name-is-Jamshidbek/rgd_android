@@ -31,7 +31,7 @@
         <activity android:name=".activities.menu.AgentProductsActivity" />
         <activity android:name=".activities.MainActivity" />
         <activity android:name=".activities.menu.SettingsActivity" />
-        <activity android:name=".activities.pages.TaskActivity" />
+        <activity android:name=".activities.pages.DemoActivity" />
         <activity android:name=".activities.pages.SmsVerificationActivity" />
 
         <service
