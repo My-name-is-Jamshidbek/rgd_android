@@ -58,7 +58,6 @@ class TaskActivity : AppCompatActivity() {
     private lateinit var pointExpireDateTextView: TextView
     private lateinit var pointExpireTextView: TextView
     private lateinit var pointInstallationDateTextView: TextView
-    private lateinit var swipeRefreshLayout: SwipeRefreshLayout
 
     private lateinit var productRecyclerView: RecyclerView
     private lateinit var addProductButton: Button
@@ -100,7 +99,6 @@ class TaskActivity : AppCompatActivity() {
         pointExpireDateTextView = findViewById(R.id.pointExpireDateTextView)
         pointExpireTextView = findViewById(R.id.pointExpireTextView)
         pointInstallationDateTextView = findViewById(R.id.pointInstallationDateTextView)
-        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
 
 
         // Initialize RecyclerView for products
@@ -127,9 +125,7 @@ class TaskActivity : AppCompatActivity() {
         sendPointLocation.setOnClickListener {
             requestLocationPermission()
         }
-        swipeRefreshLayout.setOnRefreshListener {
-            fetchTaskDetails(taskId)
-        }
+
         // Fetch task details
         fetchTaskDetails(taskId)
     }
@@ -137,7 +133,7 @@ class TaskActivity : AppCompatActivity() {
 
     private fun sendTaskProductsWithCheckboxResults() {
         val selectedProducts = taskProducts.map { agentProduct ->
-            TaskProduct(agentProduct.id, agentProduct.isSelected, agentProduct.price, agentProduct.servicePrice)
+            TaskProduct(agentProduct.productId, agentProduct.isSelected, agentProduct.price, agentProduct.servicePrice)
         }
 
         val setTaskRequest = ProductRequest(selectedProducts)
