@@ -3,12 +3,14 @@ package com.example.waterfilter.activities
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
@@ -26,6 +28,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
 
     private val LocationCode = 1000
+    private val ForegroundServiceLocationCode = 1001
     private val handler = Handler(Looper.getMainLooper())
     private lateinit var bottomNavigationView: BottomNavigationView
 
@@ -75,32 +78,60 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadFragment(fragment: Fragment) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+        if (currentFragment != null && currentFragment::class.java == fragment::class.java) {
+            return // Avoid reloading the same fragment
+        }
         supportFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .commit()
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     private fun checkPermissions() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
             ActivityCompat.requestPermissions(this, arrayOf(
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ), LocationCode)
+
+        } else if (ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(
+                Manifest.permission.FOREGROUND_SERVICE_LOCATION
+            ), ForegroundServiceLocationCode)
+
         } else {
             startLocationService()
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LocationCode) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) &&
-                (grantResults.size > 1 && grantResults[1] == PackageManager.PERMISSION_GRANTED)) {
-                startLocationService()
-            } else {
-                Toast.makeText(this, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
+        when (requestCode) {
+            LocationCode -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    // Now request the foreground service permission
+                    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.FOREGROUND_SERVICE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(this, arrayOf(
+                            Manifest.permission.FOREGROUND_SERVICE_LOCATION
+                        ), ForegroundServiceLocationCode)
+                    } else {
+                        startLocationService()
+                    }
+                } else {
+                    Toast.makeText(this, "Lokatsiyani uzatishga ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            ForegroundServiceLocationCode -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startLocationService()
+                } else {
+                    Toast.makeText(this, "Foreground Service ruxsat etilmagan!", Toast.LENGTH_SHORT).show()
+                }
             }
         }
     }
@@ -130,6 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logout() {
+        stopLocationService() // Stop the location service upon logout
         val sharedPreferences = getSharedPreferences("LoginPrefs", MODE_PRIVATE)
         val editor = sharedPreferences.edit()
         editor.clear()
@@ -139,8 +171,14 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(this, "Hisobdan chiqildi", Toast.LENGTH_SHORT).show()
     }
 
+    private fun stopLocationService() {
+        val serviceIntent = Intent(this, LocationService::class.java)
+        stopService(serviceIntent)
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         handler.removeCallbacks(locationRunnable)
+        stopLocationService() // Ensure the service is stopped when the activity is destroyed
     }
 }

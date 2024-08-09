@@ -136,9 +136,9 @@ class LocationService : Service() {
                 val response: Response<Void> = apiService.updateLocation("Bearer $token", locationData)
                 if (response.isSuccessful) {
                     Log.d(TAG, "sendLocationToServer: Location sent successfully: ${response.message()}")
-//                    GlobalScope.launch(Dispatchers.Main) {
-//                        Toast.makeText(this@LocationService, "Location sent successfully", Toast.LENGTH_SHORT).show()
-//                    }
+                    GlobalScope.launch(Dispatchers.Main) {
+                        Toast.makeText(this@LocationService, "Location sent successfully", Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     Log.e(TAG, "sendLocationToServer: Failed to send location: ${response.code()} - ${response.message()}")
                     if (response.code() == 401){
